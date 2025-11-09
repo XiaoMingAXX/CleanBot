@@ -1,0 +1,127 @@
+# ============================================
+# STM32 Keil MDK-ARM Project
+# ============================================
+
+# Keil Project Files
+*.uvguix*
+*.uvoptx
+*.uvprojx
+*.uvopt
+*.uvproj
+*.plg
+*.tra
+*.lst
+*.map
+*.lnp
+*.dep
+*.htm
+*.sct
+*.bak
+*.iex
+*.crf
+*.d
+*.o
+*.axf
+*.hex
+*.bin
+*.elf
+*.lnt
+*.scvd
+*.build_log.htm
+*.jlink
+*.jlinkSettings
+
+# Build Output Directories
+MDK-ARM/**/RTE/
+MDK-ARM/**/DebugConfig/
+MDK-ARM/**/Listings/
+MDK-ARM/**/Objects/
+MDK-ARM/**/Debug/
+MDK-ARM/**/Release/
+build/
+Build/
+BUILD/
+output/
+Output/
+OUTPUT/
+
+# IDE Files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# OS Files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Desktop.ini
+
+# Backup Files
+*.bak
+*.backup
+*.tmp
+Backup/
+Core/Inc/Backup/
+Core/Src/Backup/
+**/Backup/
+**/*.bak
+
+# Compiled Files
+*.obj
+*.lib
+*.a
+*.exe
+*.dll
+*.so
+
+# Debug Files
+*.pdb
+*.ilk
+*.log
+*.tlog
+*.idb
+*.pch
+
+# CubeMX Generated Files (keep .ioc for version control)
+# *.ioc  # Uncomment if you want to ignore .ioc files
+
+# FreeRTOS Config
+# Keep FreeRTOSConfig.h in version control
+
+# Documentation Build
+docs/_build/
+docs/.doctrees/
+
+# Python (if using any Python scripts)
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+
+# Test Files
+test_results/
+*.test
+
+# Log Files
+*.log
+logs/
+
+# Temporary Files
+*.tmp
+*.temp
+*~
+

@@ -1,0 +1,308 @@
+/**
+  ******************************************************************************
+  * @file    sensor_manager.c
+  * @brief   传感器管理模块实现
+  * @author  CleanBot Team
+  * @date    2025-01-XX
+  ******************************************************************************
+  */
+
+#include "sensor_manager.h"
+#include "ir_sensor.h"
+#include "photo_gate.h"
+#include "main.h"
+#include "cmsis_os.h"
+
+/* 全局传感器管理器实例 */
+static SensorManager_t g_SensorManager;
+
+/* 按钮配置 */
+#define BUTTON_CLICK_TIMEOUT_MS     500     /* 单击超时时间 (ms) */
+#define BUTTON_DOUBLE_CLICK_GAP_MS  300     /* 双击间隔时间 (ms) */
+
+/* 中断回调中使用的静态变量（用于边沿检测） */
+static struct {
+    uint32_t lastEdgeTime[4];   /* 红外传感器上次边沿时间 */
+    bool lastLevel[4];          /* 红外传感器上次电平 */
+} irSensorState;
+
+/**
+ * @brief  初始化传感器管理器
+ */
+void SensorManager_Init(SensorManager_t *manager)
+{
+    if (manager == NULL) return;
+    
+    /* 创建事件队列 */
+    manager->eventQueue = xQueueCreate(20, sizeof(SensorEvent_t));
+    
+    /* 初始化按钮状态 */
+    manager->button1.pressTime = 0;
+    manager->button1.releaseTime = 0;
+    manager->button1.isPressed = false;
+    manager->button1.lastState = true;  /* 默认高电平（未按下） */
+    manager->button1.clickCount = 0;
+    manager->button1.lastClickTime = 0;
+    
+    manager->button2.pressTime = 0;
+    manager->button2.releaseTime = 0;
+    manager->button2.isPressed = false;
+    manager->button2.lastState = true;
+    manager->button2.clickCount = 0;
+    manager->button2.lastClickTime = 0;
+    
+    /* 初始化传感器状态 */
+    manager->photoGateLeftBlocked = false;
+    manager->photoGateRightBlocked = false;
+    
+    /* 初始化红外传感器状态 */
+    for (int i = 0; i < 4; i++) {
+        manager->irSensors[i].dataReady = false;
+        irSensorState.lastEdgeTime[i] = 0;
+        irSensorState.lastLevel[i] = false;
+    }
+    
+    manager->enabled = false;
+}
+
+/**
+ * @brief  启动传感器管理器
+ */
+void SensorManager_Start(SensorManager_t *manager)
+{
+    if (manager == NULL) return;
+    manager->enabled = true;
+}
+
+/**
+ * @brief  停止传感器管理器
+ */
+void SensorManager_Stop(SensorManager_t *manager)
+{
+    if (manager == NULL) return;
+    manager->enabled = false;
+}
+
+/**
+ * @brief  红外传感器中断处理（左侧）
+ */
+void SensorManager_IRQHandler_IR_Left(void)
+{
+    BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+    SensorEvent_t event;
+    
+    bool currentLevel = HAL_GPIO_ReadPin(L_RECEIVE_GPIO_Port, L_RECEIVE_Pin) == GPIO_PIN_SET;
+    uint32_t currentTime = HAL_GetTick() * 1000;  /* 转换为微秒（近似） */
+    
+    /* 检测边沿 */
+    if (currentLevel != irSensorState.lastLevel[0]) {
+        uint32_t period = currentTime - irSensorState.lastEdgeTime[0];
+        
+        /* 发送边沿事件到队列（在任务中处理NEC解码） */
+        event.type = SENSOR_EVENT_IR_LEFT;
+        event.timestamp = currentTime;
+        event.data = (currentLevel ? 1 : 0) | (period << 1);  /* 临时存储边沿信息 */
+        
+        xQueueSendFromISR(g_SensorManager.eventQueue, &event, &xHigherPriorityTaskWoken);
+        
+        irSensorState.lastEdgeTime[0] = currentTime;
+        irSensorState.lastLevel[0] = currentLevel;
+    }
+    
+    portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
+}
+
+/**
+ * @brief  红外传感器中断处理（右侧）
+ */
+void SensorManager_IRQHandler_IR_Right(void)
+{
+    BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+    SensorEvent_t event;
+    
+    bool currentLevel = HAL_GPIO_ReadPin(R_RECEIVE_GPIO_Port, R_RECEIVE_Pin) == GPIO_PIN_SET;
+    uint32_t currentTime = HAL_GetTick() * 1000;
+    
+    if (currentLevel != irSensorState.lastLevel[1]) {
+        uint32_t period = currentTime - irSensorState.lastEdgeTime[1];
+        
+        event.type = SENSOR_EVENT_IR_RIGHT;
+        event.timestamp = currentTime;
+        event.data = (currentLevel ? 1 : 0) | (period << 1);
+        
+        xQueueSendFromISR(g_SensorManager.eventQueue, &event, &xHigherPriorityTaskWoken);
+        
+        irSensorState.lastEdgeTime[1] = currentTime;
+        irSensorState.lastLevel[1] = currentLevel;
+    }
+    
+    portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
+}
+
+/**
+ * @brief  红外传感器中断处理（左前）
+ */
+void SensorManager_IRQHandler_IR_FrontLeft(void)
+{
+    BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+    SensorEvent_t event;
+    
+    bool currentLevel = HAL_GPIO_ReadPin(L_FOLLOW_CHECK_SIGNAL_GPIO_Port, L_FOLLOW_CHECK_SIGNAL_Pin) == GPIO_PIN_SET;
+    uint32_t currentTime = HAL_GetTick() * 1000;
+    
+    if (currentLevel != irSensorState.lastLevel[2]) {
+        uint32_t period = currentTime - irSensorState.lastEdgeTime[2];
+        
+        event.type = SENSOR_EVENT_IR_FRONT_LEFT;
+        event.timestamp = currentTime;
+        event.data = (currentLevel ? 1 : 0) | (period << 1);
+        
+        xQueueSendFromISR(g_SensorManager.eventQueue, &event, &xHigherPriorityTaskWoken);
+        
+        irSensorState.lastEdgeTime[2] = currentTime;
+        irSensorState.lastLevel[2] = currentLevel;
+    }
+    
+    portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
+}
+
+/**
+ * @brief  红外传感器中断处理（右前）
+ */
+void SensorManager_IRQHandler_IR_FrontRight(void)
+{
+    BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+    SensorEvent_t event;
+    
+    bool currentLevel = HAL_GPIO_ReadPin(R_FOLLOW_CHECK_SIGNAL_GPIO_Port, R_FOLLOW_CHECK_SIGNAL_Pin) == GPIO_PIN_SET;
+    uint32_t currentTime = HAL_GetTick() * 1000;
+    
+    if (currentLevel != irSensorState.lastLevel[3]) {
+        uint32_t period = currentTime - irSensorState.lastEdgeTime[3];
+        
+        event.type = SENSOR_EVENT_IR_FRONT_RIGHT;
+        event.timestamp = currentTime;
+        event.data = (currentLevel ? 1 : 0) | (period << 1);
+        
+        xQueueSendFromISR(g_SensorManager.eventQueue, &event, &xHigherPriorityTaskWoken);
+        
+        irSensorState.lastEdgeTime[3] = currentTime;
+        irSensorState.lastLevel[3] = currentLevel;
+    }
+    
+    portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
+}
+
+/**
+ * @brief  光电门中断处理（左侧）
+ */
+void SensorManager_IRQHandler_PhotoGate_Left(void)
+{
+    BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+    SensorEvent_t event;
+    
+    /* 读取GPIO状态（高电平表示碰撞） */
+    bool isBlocked = HAL_GPIO_ReadPin(IFHIT_L_GPIO_Port, IFHIT_L_Pin) == GPIO_PIN_SET;
+    
+    event.type = SENSOR_EVENT_PHOTO_GATE_LEFT;
+    event.timestamp = HAL_GetTick();
+    event.data = isBlocked ? 1 : 0;
+    
+    xQueueSendFromISR(g_SensorManager.eventQueue, &event, &xHigherPriorityTaskWoken);
+    portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
+}
+
+/**
+ * @brief  光电门中断处理（右侧）
+ */
+void SensorManager_IRQHandler_PhotoGate_Right(void)
+{
+    BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+    SensorEvent_t event;
+    
+    bool isBlocked = HAL_GPIO_ReadPin(IFHIT_R_GPIO_Port, IFHIT_R_Pin) == GPIO_PIN_SET;
+    
+    event.type = SENSOR_EVENT_PHOTO_GATE_RIGHT;
+    event.timestamp = HAL_GetTick();
+    event.data = isBlocked ? 1 : 0;
+    
+    xQueueSendFromISR(g_SensorManager.eventQueue, &event, &xHigherPriorityTaskWoken);
+    portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
+}
+
+/**
+ * @brief  按钮1中断处理
+ */
+void SensorManager_IRQHandler_Button1(void)
+{
+    BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+    SensorEvent_t event;
+    
+    /* 读取GPIO状态（低电平表示按下） */
+    bool isPressed = HAL_GPIO_ReadPin(BUTTON1_GPIO_Port, BUTTON1_Pin) == GPIO_PIN_RESET;
+    
+    if (isPressed && !g_SensorManager.button1.lastState) {
+        /* 按下事件 */
+        event.type = SENSOR_EVENT_BUTTON1_PRESS;
+        event.timestamp = HAL_GetTick();
+        event.data = 0;
+        xQueueSendFromISR(g_SensorManager.eventQueue, &event, &xHigherPriorityTaskWoken);
+    } else if (!isPressed && g_SensorManager.button1.lastState) {
+        /* 释放事件 */
+        event.type = SENSOR_EVENT_BUTTON1_RELEASE;
+        event.timestamp = HAL_GetTick();
+        event.data = 0;
+        xQueueSendFromISR(g_SensorManager.eventQueue, &event, &xHigherPriorityTaskWoken);
+    }
+    
+    g_SensorManager.button1.lastState = !isPressed;
+    portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
+}
+
+/**
+ * @brief  按钮2中断处理
+ */
+void SensorManager_IRQHandler_Button2(void)
+{
+    BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+    SensorEvent_t event;
+    
+    bool isPressed = HAL_GPIO_ReadPin(BUTTON2_GPIO_Port, BUTTON2_Pin) == GPIO_PIN_RESET;
+    
+    if (isPressed && !g_SensorManager.button2.lastState) {
+        event.type = SENSOR_EVENT_BUTTON2_PRESS;
+        event.timestamp = HAL_GetTick();
+        event.data = 0;
+        xQueueSendFromISR(g_SensorManager.eventQueue, &event, &xHigherPriorityTaskWoken);
+    } else if (!isPressed && g_SensorManager.button2.lastState) {
+        event.type = SENSOR_EVENT_BUTTON2_RELEASE;
+        event.timestamp = HAL_GetTick();
+        event.data = 0;
+        xQueueSendFromISR(g_SensorManager.eventQueue, &event, &xHigherPriorityTaskWoken);
+    }
+    
+    g_SensorManager.button2.lastState = !isPressed;
+    portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
+}
+
+/**
+ * @brief  获取事件
+ */
+bool SensorManager_GetEvent(SensorManager_t *manager, SensorEvent_t *event, uint32_t timeout)
+{
+    if (manager == NULL || event == NULL) return false;
+    
+    if (xQueueReceive(manager->eventQueue, event, pdMS_TO_TICKS(timeout)) == pdTRUE) {
+        return true;
+    }
+    return false;
+}
+
+/**
+ * @brief  获取全局传感器管理器实例
+ */
+SensorManager_t* SensorManager_GetInstance(void)
+{
+    return &g_SensorManager;
+}
+
