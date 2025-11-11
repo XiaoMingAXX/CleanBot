@@ -103,22 +103,44 @@ static void MotorCtrlTask_WheelMotorControl(void)
     float leftOutput = PID_Compute(&g_pCleanBotApp->pidWheelLeft, leftCurrentRPM);
     float rightOutput = PID_Compute(&g_pCleanBotApp->pidWheelRight, rightCurrentRPM);
     
-    /* 设置电机速度 */
+    /* 设置电机速度和方向 */
+    /* 左轮电机 */
     if (leftTargetRPM >= 0) {
+        /* 正向 */
         Motor_SetDirection(&g_pCleanBotApp->wheelMotorLeft, MOTOR_STATE_FORWARD);
+        /* 限制速度范围在0-1000 */
+        int16_t leftSpeed = (int16_t)leftOutput;
+        if (leftSpeed < 0) leftSpeed = 0;
+        if (leftSpeed > 1000) leftSpeed = 1000;
+        Motor_SetSpeed(&g_pCleanBotApp->wheelMotorLeft, leftSpeed);
     } else {
+        /* 反向 */
         Motor_SetDirection(&g_pCleanBotApp->wheelMotorLeft, MOTOR_STATE_BACKWARD);
-        leftOutput = -leftOutput;
+        /* 取绝对值并限制速度范围在0-1000 */
+        int16_t leftSpeed = (int16_t)(-leftOutput);
+        if (leftSpeed < 0) leftSpeed = 0;
+        if (leftSpeed > 1000) leftSpeed = 1000;
+        Motor_SetSpeed(&g_pCleanBotApp->wheelMotorLeft, leftSpeed);
     }
-    Motor_SetSpeed(&g_pCleanBotApp->wheelMotorLeft, (int16_t)leftOutput);
     
+    /* 右轮电机 */
     if (rightTargetRPM >= 0) {
+        /* 正向 */
         Motor_SetDirection(&g_pCleanBotApp->wheelMotorRight, MOTOR_STATE_FORWARD);
+        /* 限制速度范围在0-1000 */
+        int16_t rightSpeed = (int16_t)rightOutput;
+        if (rightSpeed < 0) rightSpeed = 0;
+        if (rightSpeed > 1000) rightSpeed = 1000;
+        Motor_SetSpeed(&g_pCleanBotApp->wheelMotorRight, rightSpeed);
     } else {
+        /* 反向 */
         Motor_SetDirection(&g_pCleanBotApp->wheelMotorRight, MOTOR_STATE_BACKWARD);
-        rightOutput = -rightOutput;
+        /* 取绝对值并限制速度范围在0-1000 */
+        int16_t rightSpeed = (int16_t)(-rightOutput);
+        if (rightSpeed < 0) rightSpeed = 0;
+        if (rightSpeed > 1000) rightSpeed = 1000;
+        Motor_SetSpeed(&g_pCleanBotApp->wheelMotorRight, rightSpeed);
     }
-    Motor_SetSpeed(&g_pCleanBotApp->wheelMotorRight, (int16_t)rightOutput);
 }
 
 /**
@@ -237,7 +259,7 @@ static void MotorCtrlTask_FanMotorControl(void)
     Motor_SetDirection(&g_pCleanBotApp->fanMotor, MOTOR_STATE_FORWARD);
     Motor_SetSpeed(&g_pCleanBotApp->fanMotor, (int16_t)output);
 }
-
+float leftCurrentRPM,rightCurrentRPM=0.0;
 /**
  * @brief  电机控制任务主函数
  */
@@ -249,18 +271,28 @@ void MotorCtrlTask_Run(void *argument)
         /* 更新LED2状态 */
         MotorCtrlTask_UpdateLED2();
         
-        /* 轮电机控制 */
-        MotorCtrlTask_WheelMotorControl();
+        // /* 轮电机控制 */
+        // MotorCtrlTask_WheelMotorControl();
         
-        /* 边刷电机控制 */
-        MotorCtrlTask_BrushMotorControl();
+        // /* 边刷电机控制 */
+        // MotorCtrlTask_BrushMotorControl();
         
-        /* 水箱增压电机控制 */
-        MotorCtrlTask_PumpMotorControl();
+        // /* 水箱增压电机控制 */
+        // MotorCtrlTask_PumpMotorControl();
         
-        /* 风机控制 */
-        MotorCtrlTask_FanMotorControl();
-        
+        // /* 风机控制 */
+        // MotorCtrlTask_FanMotorControl();
+        // Motor_SetSpeed(&g_pCleanBotApp->fanMotor, 500);
+        // Motor_SetSpeed(&g_pCleanBotApp->pumpMotor, 500);
+        // Motor_SetSpeed(&g_pCleanBotApp->brushMotorLeft, 500);
+        // Motor_SetSpeed(&g_pCleanBotApp->brushMotorRight, 500);
+         Motor_SetDirection(&g_pCleanBotApp->wheelMotorLeft, MOTOR_STATE_BACKWARD);
+         Motor_SetDirection(&g_pCleanBotApp->wheelMotorRight, MOTOR_STATE_BACKWARD);
+         Motor_SetSpeed(&g_pCleanBotApp->wheelMotorLeft, 0);
+         Motor_SetSpeed(&g_pCleanBotApp->wheelMotorRight, 0);
+        leftCurrentRPM = Encoder_GetSpeed(&g_pCleanBotApp->encoderWheelLeft);
+        rightCurrentRPM = Encoder_GetSpeed(&g_pCleanBotApp->encoderWheelRight);
+
         osDelay(5);  /* 5ms控制周期 */
     }
 }

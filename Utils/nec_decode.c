@@ -8,6 +8,9 @@
   */
 
 #include "nec_decode.h"
+#include <stddef.h>  /* 定义NULL */
+#include <stdint.h>
+#include <stdbool.h>
 
 /**
   * @brief  初始化NEC解码器

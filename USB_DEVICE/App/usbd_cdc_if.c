@@ -22,7 +22,8 @@
 #include "usbd_cdc_if.h"
 
 /* USER CODE BEGIN INCLUDE */
-
+#include "CleanBotApp.h"
+#include "usb_comm.h"
 /* USER CODE END INCLUDE */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -155,6 +156,13 @@ static int8_t CDC_Init_FS(void)
   /* Set Application Buffers */
   USBD_CDC_SetTxBuffer(&hUsbDeviceFS, UserTxBufferFS, 0);
   USBD_CDC_SetRxBuffer(&hUsbDeviceFS, UserRxBufferFS);
+  
+  /* 更新USB连接状态 */
+  extern CleanBotApp_t *g_pCleanBotApp;
+  if (g_pCleanBotApp != NULL) {
+    USB_Comm_SetConnected(&g_pCleanBotApp->usbComm, true);
+  }
+  
   return (USBD_OK);
   /* USER CODE END 3 */
 }
@@ -166,6 +174,12 @@ static int8_t CDC_Init_FS(void)
 static int8_t CDC_DeInit_FS(void)
 {
   /* USER CODE BEGIN 4 */
+  /* 更新USB连接状态为断开 */
+  extern CleanBotApp_t *g_pCleanBotApp;
+  if (g_pCleanBotApp != NULL) {
+    USB_Comm_SetConnected(&g_pCleanBotApp->usbComm, false);
+  }
+  
   return (USBD_OK);
   /* USER CODE END 4 */
 }
@@ -228,7 +242,9 @@ static int8_t CDC_Control_FS(uint8_t cmd, uint8_t* pbuf, uint16_t length)
     break;
 
     case CDC_SET_CONTROL_LINE_STATE:
-
+      /* 控制线状态请求，主要用于流控 */
+      /* 连接状态主要通过 USB 设备状态和 Init/DeInit 回调来检测 */
+      /* 这里不需要特殊处理，因为 USB_Comm_UpdateConnectionState 会定期检查设备状态 */
     break;
 
     case CDC_SEND_BREAK:
@@ -261,6 +277,12 @@ static int8_t CDC_Control_FS(uint8_t cmd, uint8_t* pbuf, uint16_t length)
 static int8_t CDC_Receive_FS(uint8_t* Buf, uint32_t *Len)
 {
   /* USER CODE BEGIN 6 */
+  /* 将接收到的数据传递给USB通信模块 */
+  extern CleanBotApp_t *g_pCleanBotApp;
+  if (g_pCleanBotApp != NULL && Buf != NULL && Len != NULL && *Len > 0) {
+    USB_Comm_RxCpltCallback(&g_pCleanBotApp->usbComm, Buf, *Len);
+  }
+  
   USBD_CDC_SetRxBuffer(&hUsbDeviceFS, &Buf[0]);
   USBD_CDC_ReceivePacket(&hUsbDeviceFS);
   return (USBD_OK);
@@ -311,6 +333,12 @@ static int8_t CDC_TransmitCplt_FS(uint8_t *Buf, uint32_t *Len, uint8_t epnum)
   UNUSED(Buf);
   UNUSED(Len);
   UNUSED(epnum);
+  
+  /* 通知USB通信模块发送完成 */
+  extern CleanBotApp_t *g_pCleanBotApp;
+  if (g_pCleanBotApp != NULL) {
+    USB_Comm_TxCpltCallback(&g_pCleanBotApp->usbComm);
+  }
   /* USER CODE END 13 */
   return result;
 }

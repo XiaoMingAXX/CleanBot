@@ -250,6 +250,9 @@ void SensorTask_Run(void *argument)
         /* 处理LED闪烁 */
         SensorTask_HandleLEDBlink();
         
+        /* 检查按钮滤波检测 */
+        SensorManager_CheckButtonDebounce(sensorManager);
+        
         /* 检查按钮超时 */
         SensorTask_CheckButtonTimeout();
         

@@ -11,6 +11,7 @@
 #include "usb_comm.h"
 #include "motor_ctrl_task.h"
 #include "CleanBotApp.h"
+#include "led.h"
 #include "cmsis_os.h"
 #include <string.h>
 
@@ -38,6 +39,10 @@ typedef enum {
 #define RX_BUFFER_SIZE           256
 static uint8_t rxBuffer[RX_BUFFER_SIZE];
 static uint32_t rxBufferIndex = 0;
+
+/* 连接状态检查周期（任务循环次数，每20ms一次，5次=100ms） */
+#define CONNECTION_CHECK_INTERVAL    5
+static uint32_t connectionCheckCounter = 0;
 
 /**
  * @brief  计算校验和
@@ -234,11 +239,49 @@ void USBCommTask_Init(void)
 void USBCommTask_Run(void *argument)
 {
     USBCommTask_Init();
+    connectionCheckCounter = 0;
+    bool lastConnectedState = false;
+    
+    /* 初始化时检查连接状态并设置LED4 */
+    if (g_pCleanBotApp != NULL) {
+        USB_Comm_UpdateConnectionState(&g_pCleanBotApp->usbComm);
+        lastConnectedState = USB_Comm_IsConnected(&g_pCleanBotApp->usbComm);
+        /* 初始化LED4状态：未连接时常亮，连接时关闭 */
+        if (lastConnectedState) {
+            LED_Off(&g_pCleanBotApp->led4);
+        } else {
+            LED_On(&g_pCleanBotApp->led4);
+        }
+    }
     
     while (1) {
         if (g_pCleanBotApp == NULL) {
             osDelay(100);
             continue;
+        }
+        
+        /* 周期性检查连接状态（用于自动检测重连） */
+        connectionCheckCounter++;
+        if (connectionCheckCounter >= CONNECTION_CHECK_INTERVAL) {
+            connectionCheckCounter = 0;
+            
+            /* 更新连接状态 */
+            USB_Comm_UpdateConnectionState(&g_pCleanBotApp->usbComm);
+            
+            /* 检查连接状态是否变化，更新LED4 */
+            bool currentConnectedState = USB_Comm_IsConnected(&g_pCleanBotApp->usbComm);
+            if (currentConnectedState != lastConnectedState) {
+                lastConnectedState = currentConnectedState;
+                
+                /* LED4指示USB连接状态：未连接时常亮，连接时关闭 */
+                if (currentConnectedState) {
+                    /* 已连接：关闭LED4 */
+                    LED_Off(&g_pCleanBotApp->led4);
+                } else {
+                    /* 未连接：LED4常亮 */
+                    LED_On(&g_pCleanBotApp->led4);
+                }
+            }
         }
         
         /* 接收数据 */
@@ -274,7 +317,7 @@ void USBCommTask_Run(void *argument)
                 rxBufferIndex = 0;  /* 清空缓冲区 */
             }
         }
-        
+        USBCommTask_SendPacket(CMD_ACK, NULL, 0);
         osDelay(20);
     }
 }

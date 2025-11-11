@@ -8,6 +8,7 @@
   */
 
 #include "ring_buffer.h"
+#include <stddef.h>  /* 定义NULL */
 
 /**
   * @brief  初始化环形缓冲区

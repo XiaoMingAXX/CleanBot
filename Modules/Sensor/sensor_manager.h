@@ -56,6 +56,9 @@ typedef struct {
         bool lastState;            /* 上次状态 */
         uint32_t clickCount;       /* 单击计数 */
         uint32_t lastClickTime;    /* 上次单击时间 */
+        bool debouncePending;      /* 滤波待检测标志 */
+        uint32_t debounceTime;     /* 滤波触发时间 */
+        bool debounceState;        /* 滤波待检测状态 */
     } button1, button2;
     
     /* 传感器状态 */
@@ -88,6 +91,9 @@ void SensorManager_IRQHandler_Button2(void);
 
 /* 获取事件（在Sensor任务中调用） */
 bool SensorManager_GetEvent(SensorManager_t *manager, SensorEvent_t *event, uint32_t timeout);
+
+/* 按钮滤波检测（在Sensor任务中定期调用） */
+void SensorManager_CheckButtonDebounce(SensorManager_t *manager);
 
 /* 获取全局传感器管理器实例 */
 SensorManager_t* SensorManager_GetInstance(void);

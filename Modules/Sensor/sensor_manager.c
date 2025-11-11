@@ -19,6 +19,7 @@ static SensorManager_t g_SensorManager;
 /* 按钮配置 */
 #define BUTTON_CLICK_TIMEOUT_MS     500     /* 单击超时时间 (ms) */
 #define BUTTON_DOUBLE_CLICK_GAP_MS  300     /* 双击间隔时间 (ms) */
+#define BUTTON_DEBOUNCE_TIME_MS     10      /* 按钮滤波时间 (ms) */
 
 /* 中断回调中使用的静态变量（用于边沿检测） */
 static struct {
@@ -43,6 +44,9 @@ void SensorManager_Init(SensorManager_t *manager)
     manager->button1.lastState = true;  /* 默认高电平（未按下） */
     manager->button1.clickCount = 0;
     manager->button1.lastClickTime = 0;
+    manager->button1.debouncePending = false;
+    manager->button1.debounceTime = 0;
+    manager->button1.debounceState = false;
     
     manager->button2.pressTime = 0;
     manager->button2.releaseTime = 0;
@@ -50,6 +54,9 @@ void SensorManager_Init(SensorManager_t *manager)
     manager->button2.lastState = true;
     manager->button2.clickCount = 0;
     manager->button2.lastClickTime = 0;
+    manager->button2.debouncePending = false;
+    manager->button2.debounceTime = 0;
+    manager->button2.debounceState = false;
     
     /* 初始化传感器状态 */
     manager->photoGateLeftBlocked = false;
@@ -231,58 +238,104 @@ void SensorManager_IRQHandler_PhotoGate_Right(void)
 }
 
 /**
- * @brief  按钮1中断处理
+ * @brief  按钮1中断处理（带10ms滤波检测）
  */
 void SensorManager_IRQHandler_Button1(void)
 {
-    BaseType_t xHigherPriorityTaskWoken = pdFALSE;
-    SensorEvent_t event;
-    
     /* 读取GPIO状态（低电平表示按下） */
     bool isPressed = HAL_GPIO_ReadPin(BUTTON1_GPIO_Port, BUTTON1_Pin) == GPIO_PIN_RESET;
     
-    if (isPressed && !g_SensorManager.button1.lastState) {
-        /* 按下事件 */
-        event.type = SENSOR_EVENT_BUTTON1_PRESS;
-        event.timestamp = HAL_GetTick();
-        event.data = 0;
-        xQueueSendFromISR(g_SensorManager.eventQueue, &event, &xHigherPriorityTaskWoken);
-    } else if (!isPressed && g_SensorManager.button1.lastState) {
-        /* 释放事件 */
-        event.type = SENSOR_EVENT_BUTTON1_RELEASE;
-        event.timestamp = HAL_GetTick();
-        event.data = 0;
-        xQueueSendFromISR(g_SensorManager.eventQueue, &event, &xHigherPriorityTaskWoken);
-    }
-    
-    g_SensorManager.button1.lastState = !isPressed;
-    portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
+    /* 记录滤波检测信息 */
+    g_SensorManager.button1.debouncePending = true;
+    g_SensorManager.button1.debounceTime = HAL_GetTick();
+    g_SensorManager.button1.debounceState = isPressed;
 }
 
 /**
- * @brief  按钮2中断处理
+ * @brief  按钮2中断处理（带10ms滤波检测）
  */
 void SensorManager_IRQHandler_Button2(void)
 {
-    BaseType_t xHigherPriorityTaskWoken = pdFALSE;
-    SensorEvent_t event;
-    
+    /* 读取GPIO状态（低电平表示按下） */
     bool isPressed = HAL_GPIO_ReadPin(BUTTON2_GPIO_Port, BUTTON2_Pin) == GPIO_PIN_RESET;
     
-    if (isPressed && !g_SensorManager.button2.lastState) {
-        event.type = SENSOR_EVENT_BUTTON2_PRESS;
-        event.timestamp = HAL_GetTick();
-        event.data = 0;
-        xQueueSendFromISR(g_SensorManager.eventQueue, &event, &xHigherPriorityTaskWoken);
-    } else if (!isPressed && g_SensorManager.button2.lastState) {
-        event.type = SENSOR_EVENT_BUTTON2_RELEASE;
-        event.timestamp = HAL_GetTick();
-        event.data = 0;
-        xQueueSendFromISR(g_SensorManager.eventQueue, &event, &xHigherPriorityTaskWoken);
+    /* 记录滤波检测信息 */
+    g_SensorManager.button2.debouncePending = true;
+    g_SensorManager.button2.debounceTime = HAL_GetTick();
+    g_SensorManager.button2.debounceState = isPressed;
+}
+
+/**
+ * @brief  按钮滤波检测（在Sensor任务中定期调用）
+ */
+void SensorManager_CheckButtonDebounce(SensorManager_t *manager)
+{
+    if (manager == NULL) return;
+    
+    uint32_t currentTime = HAL_GetTick();
+    SensorEvent_t event;
+    
+    /* 检查按钮1滤波 */
+    if (manager->button1.debouncePending) {
+        /* 检查是否已经过了滤波时间 */
+        if ((currentTime - manager->button1.debounceTime) >= BUTTON_DEBOUNCE_TIME_MS) {
+            /* 再次读取GPIO状态确认 */
+            bool isPressed = HAL_GPIO_ReadPin(BUTTON1_GPIO_Port, BUTTON1_Pin) == GPIO_PIN_RESET;
+            
+            /* 如果状态与记录的一致，说明是有效事件 */
+            if (isPressed == manager->button1.debounceState) {
+                if (isPressed && !manager->button1.lastState) {
+                    /* 按下事件 */
+                    event.type = SENSOR_EVENT_BUTTON1_PRESS;
+                    event.timestamp = currentTime;
+                    event.data = 0;
+                    xQueueSend(manager->eventQueue, &event, 0);
+                } else if (!isPressed && manager->button1.lastState) {
+                    /* 释放事件 */
+                    event.type = SENSOR_EVENT_BUTTON1_RELEASE;
+                    event.timestamp = currentTime;
+                    event.data = 0;
+                    xQueueSend(manager->eventQueue, &event, 0);
+                }
+                
+                manager->button1.lastState = isPressed;
+            }
+            
+            /* 清除滤波待检测标志 */
+            manager->button1.debouncePending = false;
+        }
     }
     
-    g_SensorManager.button2.lastState = !isPressed;
-    portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
+    /* 检查按钮2滤波 */
+    if (manager->button2.debouncePending) {
+        /* 检查是否已经过了滤波时间 */
+        if ((currentTime - manager->button2.debounceTime) >= BUTTON_DEBOUNCE_TIME_MS) {
+            /* 再次读取GPIO状态确认 */
+            bool isPressed = HAL_GPIO_ReadPin(BUTTON2_GPIO_Port, BUTTON2_Pin) == GPIO_PIN_RESET;
+            
+            /* 如果状态与记录的一致，说明是有效事件 */
+            if (isPressed == manager->button2.debounceState) {
+                if (isPressed && !manager->button2.lastState) {
+                    /* 按下事件 */
+                    event.type = SENSOR_EVENT_BUTTON2_PRESS;
+                    event.timestamp = currentTime;
+                    event.data = 0;
+                    xQueueSend(manager->eventQueue, &event, 0);
+                } else if (!isPressed && manager->button2.lastState) {
+                    /* 释放事件 */
+                    event.type = SENSOR_EVENT_BUTTON2_RELEASE;
+                    event.timestamp = currentTime;
+                    event.data = 0;
+                    xQueueSend(manager->eventQueue, &event, 0);
+                }
+                
+                manager->button2.lastState = isPressed;
+            }
+            
+            /* 清除滤波待检测标志 */
+            manager->button2.debouncePending = false;
+        }
+    }
 }
 
 /**

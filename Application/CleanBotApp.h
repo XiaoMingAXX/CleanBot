@@ -93,6 +93,9 @@ void CleanBotApp_SetBrushSpeed(CleanBotApp_t *app, int16_t leftSpeed, int16_t ri
 void CleanBotApp_SetFanSpeed(CleanBotApp_t *app, int16_t speed);
 void CleanBotApp_SetPumpSpeed(CleanBotApp_t *app, int16_t speed);
 
+/* 获取应用实例 */
+CleanBotApp_t* CleanBotApp_GetInstance(void);
+
 /* 测试函数 */
 void CleanBotApp_Test_SetWheelSpeedMs(float leftSpeedMs, float rightSpeedMs);
 void CleanBotApp_Test_SetBrushMotor(uint8_t leftLevel, uint8_t rightLevel);

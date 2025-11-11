@@ -48,10 +48,12 @@ void Motor_Init(Motor_t *motor, MotorType_t type, TIM_HandleTypeDef *htim,
     motor->currentSpeed = 0;
     motor->targetSpeed = 0;
     motor->pwmChannel = channel;
+    motor->pwmChannelB = 0;  /* 单PWM模式，不使用通道B */
     motor->dirPort = dirPort;
     motor->dirPin = dirPin;
     motor->htim = htim;
     motor->enabled = false;
+    motor->dualPWM = false;  /* 单PWM模式 */
     
     /* 启动PWM */
     if (htim != NULL) {
@@ -61,6 +63,47 @@ void Motor_Init(Motor_t *motor, MotorType_t type, TIM_HandleTypeDef *htim,
     /* 初始化方向引脚为低电平 */
     if (dirPort != NULL) {
         HAL_GPIO_WritePin(dirPort, dirPin, GPIO_PIN_RESET);
+    }
+}
+
+/**
+  * @brief  初始化双PWM电机（用于轮电机）
+  * @param  motor: 电机对象指针
+  * @param  type: 电机类型
+  * @param  htim: 定时器句柄
+  * @param  channelA: PWM通道A (INA)
+  * @param  channelB: PWM通道B (INB)
+  * @retval None
+  */
+void Motor_InitDualPWM(Motor_t *motor, MotorType_t type, TIM_HandleTypeDef *htim, 
+                       uint32_t channelA, uint32_t channelB)
+{
+    if (motor == NULL) return;
+    
+    motor->vtable = &Motor_VTable;
+    motor->type = type;
+    motor->state = MOTOR_STATE_STOP;
+    motor->currentSpeed = 0;
+    motor->targetSpeed = 0;
+    motor->pwmChannel = channelA;    /* INA通道 */
+    motor->pwmChannelB = channelB;   /* INB通道 */
+    motor->dirPort = NULL;
+    motor->dirPin = 0;
+    motor->htim = htim;
+    motor->enabled = false;
+    motor->dualPWM = true;  /* 双PWM模式 */
+    
+    /* 启动两个PWM通道 */
+    if (htim != NULL) {
+        HAL_TIM_PWM_Start(htim, channelA);
+        HAL_TIM_PWM_Start(htim, channelB);
+    }
+    
+    /* 初始化两个通道都为低电平（滑行状态） */
+    if (htim != NULL) {
+        uint32_t arr = __HAL_TIM_GET_AUTORELOAD(htim);
+        __HAL_TIM_SET_COMPARE(htim, channelA, 0);
+        __HAL_TIM_SET_COMPARE(htim, channelB, 0);
     }
 }
 
@@ -82,7 +125,14 @@ static void Motor_Private_SetSpeed(Motor_t *motor, int16_t speed)
     
     if (!motor->enabled) {
         motor->currentSpeed = 0;
-        __HAL_TIM_SET_COMPARE(motor->htim, motor->pwmChannel, 0);
+        if (motor->dualPWM) {
+            /* 双PWM模式：两脚均低（滑行） */
+            __HAL_TIM_SET_COMPARE(motor->htim, motor->pwmChannel, 0);
+            __HAL_TIM_SET_COMPARE(motor->htim, motor->pwmChannelB, 0);
+        } else {
+            /* 单PWM模式：PWM为0 */
+            __HAL_TIM_SET_COMPARE(motor->htim, motor->pwmChannel, 0);
+        }
         return;
     }
     
@@ -91,7 +141,31 @@ static void Motor_Private_SetSpeed(Motor_t *motor, int16_t speed)
     uint32_t ccr = (speed * arr) / 1000;
     
     motor->currentSpeed = speed;
-    __HAL_TIM_SET_COMPARE(motor->htim, motor->pwmChannel, ccr);
+    
+    if (motor->dualPWM) {
+        /* 双PWM模式：根据方向设置PWM */
+        if (motor->state == MOTOR_STATE_FORWARD) {
+            /* 正向：INA=PWM，INB=低电平（0） */
+            __HAL_TIM_SET_COMPARE(motor->htim, motor->pwmChannel, ccr);
+            __HAL_TIM_SET_COMPARE(motor->htim, motor->pwmChannelB, 0);
+        } else if (motor->state == MOTOR_STATE_BACKWARD) {
+            /* 反向：INA=低电平（0），INB=PWM */
+            __HAL_TIM_SET_COMPARE(motor->htim, motor->pwmChannel, 0);
+            __HAL_TIM_SET_COMPARE(motor->htim, motor->pwmChannelB, ccr);
+        } else if (motor->state == MOTOR_STATE_BRAKE) {
+            /* 刹车：两脚均高（100%占空比），忽略速度设置 */
+            uint32_t arr = __HAL_TIM_GET_AUTORELOAD(motor->htim);
+            __HAL_TIM_SET_COMPARE(motor->htim, motor->pwmChannel, arr);
+            __HAL_TIM_SET_COMPARE(motor->htim, motor->pwmChannelB, arr);
+        } else {
+            /* 停止/滑行：两脚均低（0），忽略速度设置 */
+            __HAL_TIM_SET_COMPARE(motor->htim, motor->pwmChannel, 0);
+            __HAL_TIM_SET_COMPARE(motor->htim, motor->pwmChannelB, 0);
+        }
+    } else {
+        /* 单PWM模式：只设置PWM占空比，方向由dirPin控制 */
+        __HAL_TIM_SET_COMPARE(motor->htim, motor->pwmChannel, ccr);
+    }
 }
 
 /**
@@ -102,23 +176,70 @@ static void Motor_Private_SetSpeed(Motor_t *motor, int16_t speed)
   */
 static void Motor_Private_SetDirection(Motor_t *motor, MotorState_t dir)
 {
-    if (motor == NULL || motor->dirPort == NULL) return;
+    if (motor == NULL) return;
     
     motor->state = dir;
     
-    switch (dir) {
-        case MOTOR_STATE_FORWARD:
-            HAL_GPIO_WritePin(motor->dirPort, motor->dirPin, GPIO_PIN_SET);
-            break;
-        case MOTOR_STATE_BACKWARD:
-            HAL_GPIO_WritePin(motor->dirPort, motor->dirPin, GPIO_PIN_RESET);
-            break;
-        case MOTOR_STATE_STOP:
-        case MOTOR_STATE_BRAKE:
-            HAL_GPIO_WritePin(motor->dirPort, motor->dirPin, GPIO_PIN_RESET);
-            break;
-        default:
-            break;
+    if (motor->dualPWM) {
+        /* 双PWM模式：通过PWM控制方向和状态 */
+        uint32_t arr = __HAL_TIM_GET_AUTORELOAD(motor->htim);
+        uint32_t maxCCR = arr;  /* 100%占空比 */
+        
+        switch (dir) {
+            case MOTOR_STATE_FORWARD:
+                /* 正向：根据当前速度设置PWM，如果没有速度则设置为滑行状态 */
+                if (motor->currentSpeed > 0) {
+                    uint32_t ccr = (motor->currentSpeed * arr) / 1000;
+                    __HAL_TIM_SET_COMPARE(motor->htim, motor->pwmChannel, ccr);
+                    __HAL_TIM_SET_COMPARE(motor->htim, motor->pwmChannelB, 0);
+                } else {
+                    /* 速度为0时，设置为滑行状态 */
+                    __HAL_TIM_SET_COMPARE(motor->htim, motor->pwmChannel, 0);
+                    __HAL_TIM_SET_COMPARE(motor->htim, motor->pwmChannelB, 0);
+                }
+                break;
+            case MOTOR_STATE_BACKWARD:
+                /* 反向：根据当前速度设置PWM，如果没有速度则设置为滑行状态 */
+                if (motor->currentSpeed > 0) {
+                    uint32_t ccr = (motor->currentSpeed * arr) / 1000;
+                    __HAL_TIM_SET_COMPARE(motor->htim, motor->pwmChannel, 0);
+                    __HAL_TIM_SET_COMPARE(motor->htim, motor->pwmChannelB, ccr);
+                } else {
+                    /* 速度为0时，设置为滑行状态 */
+                    __HAL_TIM_SET_COMPARE(motor->htim, motor->pwmChannel, 0);
+                    __HAL_TIM_SET_COMPARE(motor->htim, motor->pwmChannelB, 0);
+                }
+                break;
+            case MOTOR_STATE_BRAKE:
+                /* 刹车：两脚均高（100%占空比） */
+                __HAL_TIM_SET_COMPARE(motor->htim, motor->pwmChannel, maxCCR);
+                __HAL_TIM_SET_COMPARE(motor->htim, motor->pwmChannelB, maxCCR);
+                break;
+            case MOTOR_STATE_STOP:
+            default:
+                /* 停止/滑行：两脚均低（0） */
+                __HAL_TIM_SET_COMPARE(motor->htim, motor->pwmChannel, 0);
+                __HAL_TIM_SET_COMPARE(motor->htim, motor->pwmChannelB, 0);
+                break;
+        }
+    } else {
+        /* 单PWM模式：通过GPIO控制方向 */
+        if (motor->dirPort == NULL) return;
+        
+        switch (dir) {
+            case MOTOR_STATE_FORWARD:
+                HAL_GPIO_WritePin(motor->dirPort, motor->dirPin, GPIO_PIN_SET);
+                break;
+            case MOTOR_STATE_BACKWARD:
+                HAL_GPIO_WritePin(motor->dirPort, motor->dirPin, GPIO_PIN_RESET);
+                break;
+            case MOTOR_STATE_STOP:
+            case MOTOR_STATE_BRAKE:
+                HAL_GPIO_WritePin(motor->dirPort, motor->dirPin, GPIO_PIN_RESET);
+                break;
+            default:
+                break;
+        }
     }
 }
 
@@ -136,7 +257,14 @@ static void Motor_Private_Stop(Motor_t *motor)
     motor->currentSpeed = 0;
     
     if (motor->htim != NULL) {
-        __HAL_TIM_SET_COMPARE(motor->htim, motor->pwmChannel, 0);
+        if (motor->dualPWM) {
+            /* 双PWM模式：两脚均低（滑行） */
+            __HAL_TIM_SET_COMPARE(motor->htim, motor->pwmChannel, 0);
+            __HAL_TIM_SET_COMPARE(motor->htim, motor->pwmChannelB, 0);
+        } else {
+            /* 单PWM模式：PWM为0 */
+            __HAL_TIM_SET_COMPARE(motor->htim, motor->pwmChannel, 0);
+        }
     }
 }
 
@@ -153,12 +281,19 @@ static void Motor_Private_Brake(Motor_t *motor)
     motor->targetSpeed = 0;
     motor->currentSpeed = 0;
     
-    /* 刹车时设置方向引脚为低电平，PWM为0 */
-    if (motor->dirPort != NULL) {
-        HAL_GPIO_WritePin(motor->dirPort, motor->dirPin, GPIO_PIN_RESET);
-    }
     if (motor->htim != NULL) {
-        __HAL_TIM_SET_COMPARE(motor->htim, motor->pwmChannel, 0);
+        if (motor->dualPWM) {
+            /* 双PWM模式：两脚均高（100%占空比） */
+            uint32_t arr = __HAL_TIM_GET_AUTORELOAD(motor->htim);
+            __HAL_TIM_SET_COMPARE(motor->htim, motor->pwmChannel, arr);
+            __HAL_TIM_SET_COMPARE(motor->htim, motor->pwmChannelB, arr);
+        } else {
+            /* 单PWM模式：设置方向引脚为低电平，PWM为0 */
+            if (motor->dirPort != NULL) {
+                HAL_GPIO_WritePin(motor->dirPort, motor->dirPin, GPIO_PIN_RESET);
+            }
+            __HAL_TIM_SET_COMPARE(motor->htim, motor->pwmChannel, 0);
+        }
     }
 }
 

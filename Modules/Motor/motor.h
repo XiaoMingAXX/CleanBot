@@ -54,16 +54,20 @@ struct Motor {
     MotorState_t state;           /* 当前状态 */
     int16_t currentSpeed;         /* 当前速度 (0-1000) */
     int16_t targetSpeed;          /* 目标速度 (0-1000) */
-    uint32_t pwmChannel;          /* PWM通道 */
-    GPIO_TypeDef *dirPort;        /* 方向控制端口 */
-    uint16_t dirPin;              /* 方向控制引脚 */
+    uint32_t pwmChannel;          /* PWM通道A (INA) */
+    uint32_t pwmChannelB;         /* PWM通道B (INB)，0表示不使用双PWM */
+    GPIO_TypeDef *dirPort;        /* 方向控制端口（单PWM模式使用） */
+    uint16_t dirPin;              /* 方向控制引脚（单PWM模式使用） */
     TIM_HandleTypeDef *htim;      /* 定时器句柄 */
     bool enabled;                 /* 使能标志 */
+    bool dualPWM;                 /* 是否使用双PWM模式 */
 };
 
 /* 函数声明 */
 void Motor_Init(Motor_t *motor, MotorType_t type, TIM_HandleTypeDef *htim, 
                 uint32_t channel, GPIO_TypeDef *dirPort, uint16_t dirPin);
+void Motor_InitDualPWM(Motor_t *motor, MotorType_t type, TIM_HandleTypeDef *htim, 
+                       uint32_t channelA, uint32_t channelB);
 void Motor_SetSpeed(Motor_t *motor, int16_t speed);
 void Motor_SetDirection(Motor_t *motor, MotorState_t dir);
 void Motor_Stop(Motor_t *motor);

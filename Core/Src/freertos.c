@@ -116,7 +116,8 @@ void MX_FREERTOS_Init(void) {
 
   /* USER CODE BEGIN RTOS_TIMERS */
   /* start timers, add new ones, ... */
-  /* USER CODE END RTOS_TIMERS */
+  /* USER CODE END RTOS_TIMERS */ 
+	
 
   /* USER CODE BEGIN RTOS_QUEUES */
   /* add queues, ... */

@@ -35,28 +35,28 @@ void CleanBotApp_Init(CleanBotApp_t *app)
     if (app == NULL) return;
     
     /* 初始化电机 */
-    /* 左轮电机 - 需要根据实际硬件配置调整定时器和通道 */
-    Motor_Init(&app->wheelMotorLeft, MOTOR_TYPE_WHEEL, &htim1, TIM_CHANNEL_1, 
-               MOTOR1DRC_GPIO_Port, MOTOR1DRC_Pin);
+    /* 左轮电机 - 使用双PWM模式：INA (TIM4_CH1) 和 INB (TIM4_CH2) */
+    Motor_InitDualPWM(&app->wheelMotorLeft, MOTOR_TYPE_WHEEL, &htim4, 
+                      TIM_CHANNEL_1, TIM_CHANNEL_2);
     
-    /* 右轮电机 */
-    Motor_Init(&app->wheelMotorRight, MOTOR_TYPE_WHEEL, &htim1, TIM_CHANNEL_2, 
-               MOTOR2DRC_GPIO_Port, MOTOR2DRC_Pin);
+    /* 右轮电机 - 使用双PWM模式：INA (TIM4_CH3) 和 INB (TIM4_CH4) */
+    Motor_InitDualPWM(&app->wheelMotorRight, MOTOR_TYPE_WHEEL, &htim4, 
+                      TIM_CHANNEL_3, TIM_CHANNEL_4);
     
     /* 左边刷电机 */
-    Motor_Init(&app->brushMotorLeft, MOTOR_TYPE_BRUSH, &htim3, TIM_CHANNEL_1, 
+    Motor_Init(&app->brushMotorLeft, MOTOR_TYPE_BRUSH, &htim3, TIM_CHANNEL_3, 
                NULL, 0);  /* 如果边刷电机不需要方向控制，传NULL */
     
     /* 右边刷电机 */
-    Motor_Init(&app->brushMotorRight, MOTOR_TYPE_BRUSH, &htim3, TIM_CHANNEL_2, 
+    Motor_Init(&app->brushMotorRight, MOTOR_TYPE_BRUSH, &htim3, TIM_CHANNEL_4, 
                NULL, 0);
     
     /* 吸尘电机 */
-    Motor_Init(&app->fanMotor, MOTOR_TYPE_FAN, &htim4, TIM_CHANNEL_1, 
+    Motor_Init(&app->fanMotor, MOTOR_TYPE_FAN, &htim3, TIM_CHANNEL_2, 
                NULL, 0);
     
     /* 水箱增压电机 */
-    Motor_Init(&app->pumpMotor, MOTOR_TYPE_PUMP, &htim5, TIM_CHANNEL_1, 
+    Motor_Init(&app->pumpMotor, MOTOR_TYPE_PUMP, &htim3, TIM_CHANNEL_1, 
                NULL, 0);
     
     /* 初始化编码器 */
@@ -166,6 +166,7 @@ void CleanBotApp_Start(CleanBotApp_t *app)
     Motor_Enable(&app->brushMotorLeft);
     Motor_Enable(&app->brushMotorRight);
     Motor_Enable(&app->fanMotor);
+    Motor_Enable(&app->pumpMotor);
     
     /* 蜂鸣提示 */
     Buzzer_Beep(&app->buzzer, 2000, 100);

@@ -17,6 +17,9 @@
 extern "C" {
 #endif
 
+/* 注意：此文件应在包含STM32 HAL库之后使用，以避免宏定义冲突 */
+/* 建议通过cleanbot_config.h包含，它已经包含了main.h（包含HAL库） */
+
 #include <stdint.h>
 #include <stdbool.h>
 #include <stddef.h>
@@ -52,16 +55,25 @@ typedef enum {
 #define ARRAY_SIZE(arr)         (sizeof(arr) / sizeof((arr)[0]))
 
 /* 最小值/最大值宏 */
-#define MIN(a, b)               ((a) < (b) ? (a) : (b))
-#define MAX(a, b)               ((a) > (b) ? (a) : (b))
-#define CLAMP(x, min, max)      ((x) < (min) ? (min) : ((x) > (max) ? (max) : (x)))
+/* 使用条件编译避免与HAL库冲突 */
+#ifndef MIN
+    #define MIN(a, b)               ((a) < (b) ? (a) : (b))
+#endif
+#ifndef MAX
+    #define MAX(a, b)               ((a) > (b) ? (a) : (b))
+#endif
+/* CLAMP宏通常不会冲突，但为了安全也加上保护 */
+#ifndef CLAMP
+    #define CLAMP(x, min, max)      ((x) < (min) ? (min) : ((x) > (max) ? (max) : (x)))
+#endif
 
 /* 位操作宏 */
-#define BIT(n)                  (1UL << (n))
-#define SET_BIT(reg, bit)       ((reg) |= (bit))
-#define CLEAR_BIT(reg, bit)     ((reg) &= ~(bit))
-#define READ_BIT(reg, bit)      ((reg) & (bit))
-#define TOGGLE_BIT(reg, bit)    ((reg) ^= (bit))
+/* 注意：SET_BIT, CLEAR_BIT, READ_BIT, TOGGLE_BIT 已在STM32 HAL库的stm32f4xx.h中定义 */
+/* 请使用HAL库提供的宏，不要重复定义 */
+/* 如果需要自定义位操作，可以使用以下命名不同的宏 */
+#ifndef COMMON_BIT
+    #define COMMON_BIT(n)           (1UL << (n))
+#endif
 
 /* 断言宏 */
 #ifdef DEBUG

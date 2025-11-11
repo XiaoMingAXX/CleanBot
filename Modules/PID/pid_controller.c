@@ -9,6 +9,7 @@
 
 #include "pid_controller.h"
 #include "cmsis_os.h"
+#include <stddef.h>  /* 定义NULL */
 
 /**
   * @brief  初始化PID控制器

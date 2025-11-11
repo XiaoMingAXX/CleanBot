@@ -9,6 +9,8 @@
 
 #include "usb_comm.h"
 #include "usbd_cdc_if.h"
+#include "usb_device.h"
+#include <stddef.h>  /* 定义NULL */
 
 /**
   * @brief  初始化USB通信
@@ -120,6 +122,45 @@ bool USB_Comm_IsConnected(USB_Comm_t *comm)
 {
     if (comm == NULL) return false;
     return comm->connected;
+}
+
+/**
+  * @brief  设置连接状态
+  * @param  comm: USB通信对象指针
+  * @param  connected: 连接状态
+  * @retval None
+  */
+void USB_Comm_SetConnected(USB_Comm_t *comm, bool connected)
+{
+    if (comm == NULL) return;
+    comm->connected = connected;
+}
+
+/**
+  * @brief  更新连接状态（通过检查USB设备状态）
+  * @param  comm: USB通信对象指针
+  * @retval None
+  */
+void USB_Comm_UpdateConnectionState(USB_Comm_t *comm)
+{
+    if (comm == NULL) return;
+    
+    extern USBD_HandleTypeDef hUsbDeviceFS;
+    
+    /* 检查USB设备状态，如果状态为CONFIGURED，则表示已连接并配置完成 */
+    /* 注意：USBD_STATE_CONFIGURED 表示设备已配置，这是真正可以通信的状态 */
+    uint8_t devState = hUsbDeviceFS.dev_state;
+    bool isConnected = (devState == USBD_STATE_CONFIGURED);
+    
+    /* 更新连接状态 */
+    if (comm->connected != isConnected) {
+        comm->connected = isConnected;
+        
+        /* 如果断开连接，清空发送缓冲区 */
+        if (!isConnected) {
+            RingBuffer_Reset(&comm->txBuffer);
+        }
+    }
 }
 
 /**

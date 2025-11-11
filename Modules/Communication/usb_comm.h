@@ -43,6 +43,8 @@ uint32_t USB_Comm_Receive(USB_Comm_t *comm, uint8_t *data, uint32_t len);
 uint32_t USB_Comm_GetRxCount(USB_Comm_t *comm);
 uint32_t USB_Comm_GetTxFree(USB_Comm_t *comm);
 bool USB_Comm_IsConnected(USB_Comm_t *comm);
+void USB_Comm_SetConnected(USB_Comm_t *comm, bool connected);  /* 设置连接状态 */
+void USB_Comm_UpdateConnectionState(USB_Comm_t *comm);  /* 更新连接状态（通过检查USB设备状态） */
 void USB_Comm_RxCpltCallback(USB_Comm_t *comm, uint8_t *buf, uint32_t len);  /* 接收完成回调 */
 void USB_Comm_TxCpltCallback(USB_Comm_t *comm);  /* 发送完成回调 */
 
