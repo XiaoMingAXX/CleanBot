@@ -110,34 +110,22 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(LEDCONTROL3_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : R_RECEIVE_Pin (红外传感器) */
-  GPIO_InitStruct.Pin = R_RECEIVE_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING_FALLING;  /* 双边沿触发 */
+  /*Configure GPIO pins : R_RECEIVE_Pin IFHIT_R_Pin */
+  GPIO_InitStruct.Pin = R_RECEIVE_Pin|IFHIT_R_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING_FALLING;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
-  
-  /*Configure GPIO pin : IFHIT_R_Pin (右侧光电门，碰撞高电平有效) */
-  GPIO_InitStruct.Pin = IFHIT_R_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING_FALLING;  /* 双边沿触发 */
-  GPIO_InitStruct.Pull = GPIO_PULLDOWN;  /* 下拉，高电平表示碰撞 */
   HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
 
   /*Configure GPIO pins : S_FOLLOW_CHECK_SIGNAL_Pin L_RECEIVE_Pin */
   GPIO_InitStruct.Pin = S_FOLLOW_CHECK_SIGNAL_Pin|L_RECEIVE_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING_FALLING;  /* 改为双边沿触发 */
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING_FALLING;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOF, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : R_FOLLOW_CHECK_SIGNAL_Pin (红外传感器) */
-  GPIO_InitStruct.Pin = R_FOLLOW_CHECK_SIGNAL_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING_FALLING;  /* 双边沿触发 */
+  /*Configure GPIO pins : R_FOLLOW_CHECK_SIGNAL_Pin IFHIT_L_Pin */
+  GPIO_InitStruct.Pin = R_FOLLOW_CHECK_SIGNAL_Pin|IFHIT_L_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING_FALLING;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-  
-  /*Configure GPIO pin : IFHIT_L_Pin (左侧光电门，碰撞高电平有效) */
-  GPIO_InitStruct.Pin = IFHIT_L_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING_FALLING;  /* 双边沿触发 */
-  GPIO_InitStruct.Pull = GPIO_PULLDOWN;  /* 下拉，高电平表示碰撞 */
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
   /*Configure GPIO pin : LEDCONTROL4_Pin */
@@ -154,16 +142,10 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(LEDCONTROL2_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : L_FOLLOW_CHECK_SIGNAL_Pin (红外传感器) */
-  GPIO_InitStruct.Pin = L_FOLLOW_CHECK_SIGNAL_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING_FALLING;  /* 双边沿触发 */
+  /*Configure GPIO pins : L_FOLLOW_CHECK_SIGNAL_Pin BUTTON1_Pin BUTTON2_Pin */
+  GPIO_InitStruct.Pin = L_FOLLOW_CHECK_SIGNAL_Pin|BUTTON1_Pin|BUTTON2_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING_FALLING;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
-  
-  /*Configure GPIO pins : BUTTON1_Pin BUTTON2_Pin (按钮，按下低电平) */
-  GPIO_InitStruct.Pin = BUTTON1_Pin|BUTTON2_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING_FALLING;  /* 双边沿触发，检测按下和释放 */
-  GPIO_InitStruct.Pull = GPIO_PULLUP;  /* 上拉，按下时为低电平 */
   HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
 
   /*Configure GPIO pin : LEDCONTROL1_Pin */
@@ -175,7 +157,7 @@ void MX_GPIO_Init(void)
 
   /*Configure GPIO pins : SIGNAL_1_Pin SIGNAL_2_Pin */
   GPIO_InitStruct.Pin = SIGNAL_1_Pin|SIGNAL_2_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING_FALLING;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOG, &GPIO_InitStruct);
 
