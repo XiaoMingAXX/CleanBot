@@ -31,6 +31,7 @@ typedef struct {
     TIM_HandleTypeDef *htim;       /* 定时器句柄（编码器模式） */
     int32_t pulseCount;            /* 脉冲计数 */
     int32_t lastPulseCount;        /* 上次脉冲计数 */
+    int32_t lastPulseCountISR;     /* 上次脉冲计数（1kHz中断用） */
     int32_t overflowCount;         /* 溢出次数 */
     float speed;                   /* 当前速度 (RPM) */
     float speedMs;                 /* 当前速度 (m/s) - 仅用于轮电机 */
@@ -53,6 +54,9 @@ float Encoder_GetSpeed(Encoder_t *encoder);  /* 获取速度 (RPM) */
 float Encoder_GetSpeedMs(Encoder_t *encoder);  /* 获取速度 (m/s) - 仅用于轮电机 */
 void Encoder_Update(Encoder_t *encoder);     /* 更新速度计算 */
 int32_t Encoder_GetDeltaCount(Encoder_t *encoder);  /* 获取增量脉冲数 */
+
+/* 1kHz定时器中断钩子（由TIM7调用）*/
+void Encoder_On1kHzTick(Encoder_t *encoder);
 
 #ifdef __cplusplus
 }

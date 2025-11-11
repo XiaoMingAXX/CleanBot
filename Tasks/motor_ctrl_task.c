@@ -77,9 +77,6 @@ static void MotorCtrlTask_WheelMotorControl(void)
         return;
     }
     
-    /* 更新编码器速度 */
-    Encoder_Update(&g_pCleanBotApp->encoderWheelLeft);
-    Encoder_Update(&g_pCleanBotApp->encoderWheelRight);
     
     /* 获取当前速度 (m/s) */
     float leftSpeedMs = Encoder_GetSpeedMs(&g_pCleanBotApp->encoderWheelLeft);
@@ -243,8 +240,7 @@ static void MotorCtrlTask_FanMotorControl(void)
         return;
     }
     
-    /* 更新编码器速度 */
-    Encoder_Update(&g_pCleanBotApp->encoderFan);
+
     
     /* 设置PID目标值 */
     PID_SetTarget(&g_pCleanBotApp->pidFan, targetRPM);
@@ -281,15 +277,15 @@ void MotorCtrlTask_Run(void *argument)
         // MotorCtrlTask_PumpMotorControl();
         
         // /* 风机控制 */
-        // MotorCtrlTask_FanMotorControl();
-        // Motor_SetSpeed(&g_pCleanBotApp->fanMotor, 500);
-        // Motor_SetSpeed(&g_pCleanBotApp->pumpMotor, 500);
-        // Motor_SetSpeed(&g_pCleanBotApp->brushMotorLeft, 500);
-        // Motor_SetSpeed(&g_pCleanBotApp->brushMotorRight, 500);
+         //MotorCtrlTask_FanMotorControl();
+         Motor_SetSpeed(&g_pCleanBotApp->fanMotor, 500);
+         Motor_SetSpeed(&g_pCleanBotApp->pumpMotor, 500);
+         Motor_SetSpeed(&g_pCleanBotApp->brushMotorLeft, 500);
+         Motor_SetSpeed(&g_pCleanBotApp->brushMotorRight, 500);
          Motor_SetDirection(&g_pCleanBotApp->wheelMotorLeft, MOTOR_STATE_BACKWARD);
          Motor_SetDirection(&g_pCleanBotApp->wheelMotorRight, MOTOR_STATE_BACKWARD);
-         Motor_SetSpeed(&g_pCleanBotApp->wheelMotorLeft, 0);
-         Motor_SetSpeed(&g_pCleanBotApp->wheelMotorRight, 0);
+         Motor_SetSpeed(&g_pCleanBotApp->wheelMotorLeft, 500);
+         Motor_SetSpeed(&g_pCleanBotApp->wheelMotorRight, 500);
         leftCurrentRPM = Encoder_GetSpeed(&g_pCleanBotApp->encoderWheelLeft);
         rightCurrentRPM = Encoder_GetSpeed(&g_pCleanBotApp->encoderWheelRight);
 

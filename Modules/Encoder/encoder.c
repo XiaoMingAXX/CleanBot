@@ -30,6 +30,7 @@ void Encoder_Init(Encoder_t *encoder, EncoderType_t type, TIM_HandleTypeDef *hti
     encoder->htim = htim;
     encoder->pulseCount = 0;
     encoder->lastPulseCount = 0;
+    encoder->lastPulseCountISR = 0;
     encoder->overflowCount = 0;
     encoder->speed = 0.0f;
     encoder->speedMs = 0.0f;
@@ -87,6 +88,7 @@ void Encoder_Reset(Encoder_t *encoder)
     
     encoder->pulseCount = 0;
     encoder->lastPulseCount = 0;
+    encoder->lastPulseCountISR = 0;
     encoder->overflowCount = 0;
     encoder->speed = 0.0f;
     
@@ -201,5 +203,42 @@ float Encoder_GetSpeedMs(Encoder_t *encoder)
 {
     if (encoder == NULL) return 0.0f;
     return encoder->speedMs;
+}
+
+/**
+  * @brief  1kHz中断内更新速度（由TIM7调用）
+  * @note   基于1ms时间基，减少与PID频率的耦合，提高速度计算精度
+  */
+void Encoder_On1kHzTick(Encoder_t *encoder)
+{
+    if (encoder == NULL || !encoder->enabled || encoder->htim == NULL) return;
+
+    /* 读取当前累计脉冲（含溢出拓展） */
+    int32_t currentCount = Encoder_GetPulseCount(encoder);
+    int32_t delta = currentCount - encoder->lastPulseCountISR;
+    encoder->lastPulseCountISR = currentCount;
+
+    /* 1ms周期下的RPM计算：rpm = delta * 60000 / (ppr * gear) */
+    if (encoder->ppr > 0 && encoder->gearRatio > 0) {
+        float denom = (float)(encoder->ppr * encoder->gearRatio);
+        float instRPM = (float)delta * 60000.0f / denom;
+        /* 简单一阶IIR滤波，减小抖动（alpha越小越平滑） */
+        const float alphaRPM = 0.2f;
+        encoder->speed = alphaRPM * instRPM + (1.0f - alphaRPM) * encoder->speed;
+    } else {
+        encoder->speed = 0.0f;
+    }
+
+    /* 轮速 m/s：v = delta * 1000 / pulsePerMeter */
+    if ((encoder->type == ENCODER_TYPE_WHEEL_LEFT || encoder->type == ENCODER_TYPE_WHEEL_RIGHT)
+        && encoder->pulsePerMeter > 0) {
+        float instMs = ((float)delta) * 1000.0f / (float)encoder->pulsePerMeter;
+        const float alphaMs = 0.2f;
+        encoder->speedMs = alphaMs * instMs + (1.0f - alphaMs) * encoder->speedMs;
+    } else if (encoder->type == ENCODER_TYPE_FAN) {
+        /* 非轮式不更新m/s */
+    } else {
+        encoder->speedMs = 0.0f;
+    }
 }
 

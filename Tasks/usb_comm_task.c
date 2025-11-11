@@ -11,6 +11,7 @@
 #include "usb_comm.h"
 #include "motor_ctrl_task.h"
 #include "CleanBotApp.h"
+#include "encoder.h"
 #include "led.h"
 #include "cmsis_os.h"
 #include <string.h>
@@ -259,6 +260,7 @@ void USBCommTask_Run(void *argument)
             osDelay(100);
             continue;
         }
+        static uint32_t telemetryCounter = 0;
         
         /* 周期性检查连接状态（用于自动检测重连） */
         connectionCheckCounter++;
@@ -317,7 +319,19 @@ void USBCommTask_Run(void *argument)
                 rxBufferIndex = 0;  /* 清空缓冲区 */
             }
         }
-        USBCommTask_SendPacket(CMD_ACK, NULL, 0);
+
+        /* 周期性上报轮速：20ms一次（50Hz），与1kHz编码器采样解耦 */
+        telemetryCounter++;
+        if (telemetryCounter >= 1) { /* 任务循环周期约20ms，此处每次循环发一次 */
+            telemetryCounter = 0;
+            float leftSpeedMs = Encoder_GetSpeedMs(&g_pCleanBotApp->encoderWheelLeft);
+            float rightSpeedMs = Encoder_GetSpeedMs(&g_pCleanBotApp->encoderWheelRight);
+            uint8_t data[8];
+            memcpy(&data[0], &leftSpeedMs, 4);
+            memcpy(&data[4], &rightSpeedMs, 4);
+            USBCommTask_SendPacket(CMD_GET_WHEEL_SPEED, data, 8);
+        }
+
         osDelay(20);
     }
 }

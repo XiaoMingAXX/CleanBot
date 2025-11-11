@@ -37,11 +37,11 @@ void CleanBotApp_Init(CleanBotApp_t *app)
     /* 初始化电机 */
     /* 左轮电机 - 使用双PWM模式：INA (TIM4_CH1) 和 INB (TIM4_CH2) */
     Motor_InitDualPWM(&app->wheelMotorLeft, MOTOR_TYPE_WHEEL, &htim4, 
-                      TIM_CHANNEL_1, TIM_CHANNEL_2);
+                      TIM_CHANNEL_3, TIM_CHANNEL_4);
     
     /* 右轮电机 - 使用双PWM模式：INA (TIM4_CH3) 和 INB (TIM4_CH4) */
     Motor_InitDualPWM(&app->wheelMotorRight, MOTOR_TYPE_WHEEL, &htim4, 
-                      TIM_CHANNEL_3, TIM_CHANNEL_4);
+                      TIM_CHANNEL_1, TIM_CHANNEL_2);
     
     /* 左边刷电机 */
     Motor_Init(&app->brushMotorLeft, MOTOR_TYPE_BRUSH, &htim3, TIM_CHANNEL_3, 
@@ -66,12 +66,12 @@ void CleanBotApp_Init(CleanBotApp_t *app)
     Encoder_SetPulsePerMeter(&app->encoderWheelLeft, ENCODER_WHEEL_PULSE_PER_METER);
     
     /* 右轮编码器 */
-    Encoder_Init(&app->encoderWheelRight, ENCODER_TYPE_WHEEL_RIGHT, &htim3, 
+    Encoder_Init(&app->encoderWheelRight, ENCODER_TYPE_WHEEL_RIGHT, &htim1, 
                  ENCODER_WHEEL_PPR, ENCODER_WHEEL_GEAR_RATIO);
     Encoder_SetPulsePerMeter(&app->encoderWheelRight, ENCODER_WHEEL_PULSE_PER_METER);
     
     /* 风机编码器 */
-    Encoder_Init(&app->encoderFan, ENCODER_TYPE_FAN, &htim4, 
+    Encoder_Init(&app->encoderFan, ENCODER_TYPE_FAN, &htim5, 
                  ENCODER_FAN_PPR, ENCODER_FAN_GEAR_RATIO);
     
     /* 启动编码器 */

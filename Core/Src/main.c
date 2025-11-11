@@ -26,6 +26,8 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "CleanBotApp.h"
+#include "encoder.h"
 
 /* USER CODE END Includes */
 
@@ -101,7 +103,10 @@ int main(void)
   MX_UART4_Init();
   MX_USART1_UART_Init();
   MX_USART3_UART_Init();
+  MX_TIM7_Init();
   /* USER CODE BEGIN 2 */
+  /* 启动TIM7，1kHz中断用于编码器速度采样 */
+  HAL_TIM_Base_Start_IT(&htim7);
 
   /* USER CODE END 2 */
 
@@ -194,6 +199,17 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
     HAL_IncTick();
   }
   /* USER CODE BEGIN Callback 1 */
+  else if (htim->Instance == TIM7)
+  {
+    /* 1kHz编码器采样 */
+    extern CleanBotApp_t *g_pCleanBotApp;
+    if (g_pCleanBotApp != NULL) {
+      Encoder_On1kHzTick(&g_pCleanBotApp->encoderWheelLeft);
+      Encoder_On1kHzTick(&g_pCleanBotApp->encoderWheelRight);
+      /* 如需风机编码器同步采样，可取消注释 */
+      Encoder_On1kHzTick(&g_pCleanBotApp->encoderFan); 
+    }
+  }
 
   /* USER CODE END Callback 1 */
 }
