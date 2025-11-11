@@ -30,6 +30,7 @@
 #include "sensor_task.h"
 #include "motor_ctrl_task.h"
 #include "usb_comm_task.h"
+#include "imu_task.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -84,9 +85,18 @@ const osThreadAttr_t usbCommTask_attributes = {
   .stack_size = TASK_STACK_SIZE_USB_COMM * 4,
   .priority = (osPriority_t) TASK_PRIORITY_USB_COMM,
 };
+
+/* Definitions for IMUTask */
+osThreadId_t imuTaskHandle;
+const osThreadAttr_t imuTask_attributes = {
+  .name = "imuTask",
+  .stack_size = 512 * 4,
+  .priority = (osPriority_t) osPriorityAboveNormal,
+};
 extern void SensorTask_Run(void *argument);
 extern void MotorCtrlTask_Run(void *argument);
 extern void USBCommTask_Run(void *argument);
+extern void IMUTask_Run(void *argument);
 
 extern void MX_USB_DEVICE_Init(void);
 /* USER CODE END FunctionPrototypes */
@@ -142,6 +152,9 @@ void MX_FREERTOS_Init(void) {
   
   /* 创建USB通信任务 */
   usbCommTaskHandle = osThreadNew(USBCommTask_Run, NULL, &usbCommTask_attributes);
+
+  /* 创建IMU任务（200Hz上报） */
+  imuTaskHandle = osThreadNew(IMUTask_Run, NULL, &imuTask_attributes);
   
   /* 启动应用 */
   CleanBotApp_Start(app);
