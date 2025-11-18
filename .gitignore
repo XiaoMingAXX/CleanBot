@@ -2,34 +2,34 @@
 # STM32 Keil MDK-ARM Project
 # ============================================
 
-# Keil Project Files
-*.uvguix*
-*.uvoptx
-*.uvprojx
-*.uvopt
-*.uvproj
-*.plg
-*.tra
-*.lst
-*.map
-*.lnp
-*.dep
-*.htm
-*.sct
-*.bak
-*.iex
-*.crf
-*.d
-*.o
-*.axf
-*.hex
-*.bin
-*.elf
-*.lnt
-*.scvd
-*.build_log.htm
-*.jlink
-*.jlinkSettings
+# # Keil Project Files
+# *.uvguix*
+# *.uvoptx
+# *.uvprojx
+# *.uvopt
+# *.uvproj
+# *.plg
+# *.tra
+# *.lst
+# *.map
+# *.lnp
+# *.dep
+# *.htm
+# *.sct
+# *.bak
+# *.iex
+# *.crf
+# *.d
+# *.o
+# *.axf
+# *.hex
+# *.bin
+# *.elf
+# *.lnt
+# *.scvd
+# *.build_log.htm
+# *.jlink
+# *.jlinkSettings
 
 # Build Output Directories
 MDK-ARM/**/RTE/

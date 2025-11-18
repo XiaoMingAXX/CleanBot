@@ -112,12 +112,14 @@ int32_t Encoder_GetPulseCount(Encoder_t *encoder)
     static int16_t lastCounter[3] = {0, 0, 0};
     int32_t index = encoder->type;
     
-    if (counter - lastCounter[index] > 30000) {
+    if (counter - lastCounter[index] > 32768) {
         encoder->overflowCount--;
-    } else if (counter - lastCounter[index] < -30000) {
+			 
+    } else if (counter - lastCounter[index] < -32768) {
         encoder->overflowCount++;
+			 
     }
-    lastCounter[index] = counter;
+		 lastCounter[index] = counter;
     
     encoder->pulseCount = (int32_t)counter + encoder->overflowCount * 65536;
     return encoder->pulseCount;
@@ -204,7 +206,7 @@ float Encoder_GetSpeedMs(Encoder_t *encoder)
     if (encoder == NULL) return 0.0f;
     return encoder->speedMs;
 }
-
+static int32_t watch_count_now;
 /**
   * @brief  1kHz中断内更新速度（由TIM7调用）
   * @note   基于1ms时间基，减少与PID频率的耦合，提高速度计算精度
@@ -215,6 +217,7 @@ void Encoder_On1kHzTick(Encoder_t *encoder)
 
     /* 读取当前累计脉冲（含溢出拓展） */
     int32_t currentCount = Encoder_GetPulseCount(encoder);
+		watch_count_now = currentCount;
     int32_t delta = currentCount - encoder->lastPulseCountISR;
     encoder->lastPulseCountISR = currentCount;
 
@@ -223,7 +226,7 @@ void Encoder_On1kHzTick(Encoder_t *encoder)
         float denom = (float)(encoder->ppr * encoder->gearRatio);
         float instRPM = (float)delta * 60000.0f / denom;
         /* 简单一阶IIR滤波，减小抖动（alpha越小越平滑） */
-        const float alphaRPM = 0.2f;
+        const float alphaRPM = 0.8f;
         encoder->speed = alphaRPM * instRPM + (1.0f - alphaRPM) * encoder->speed;
     } else {
         encoder->speed = 0.0f;

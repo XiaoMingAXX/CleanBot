@@ -67,6 +67,7 @@ static void MotorCtrlTask_UpdateLED2(void)
 /**
  * @brief  轮电机PID控制
  */
+float watch_ms,watch_rpm,watch_target,watch_out=0.0;
 static void MotorCtrlTask_WheelMotorControl(void)
 {
     if (g_pCleanBotApp == NULL) return;
@@ -81,12 +82,16 @@ static void MotorCtrlTask_WheelMotorControl(void)
     /* 获取当前速度 (m/s) */
     float leftSpeedMs = Encoder_GetSpeedMs(&g_pCleanBotApp->encoderWheelLeft);
     float rightSpeedMs = Encoder_GetSpeedMs(&g_pCleanBotApp->encoderWheelRight);
+		
+		watch_ms = leftSpeedMs;
     
     /* PID控制 - 目标速度转换为RPM（需要根据实际参数计算） */
     /* 简化处理：直接将m/s转换为PWM占空比 */
     /* 这里需要根据实际硬件特性调整转换系数 */
     float leftTargetRPM = g_MotorCtrl.wheelMotor.leftSpeedMs * 60.0f / (3.14159f * 0.1f);  /* 假设轮子直径0.1m */
     float rightTargetRPM = g_MotorCtrl.wheelMotor.rightSpeedMs * 60.0f / (3.14159f * 0.1f);
+		
+		watch_target = leftTargetRPM;
     
     /* 设置PID目标值 */
     PID_SetTarget(&g_pCleanBotApp->pidWheelLeft, leftTargetRPM);
@@ -256,6 +261,7 @@ static void MotorCtrlTask_FanMotorControl(void)
     Motor_SetSpeed(&g_pCleanBotApp->fanMotor, (int16_t)output);
 }
 float leftCurrentRPM,rightCurrentRPM=0.0;
+float leftTarget,rightTarget=0.0;
 /**
  * @brief  电机控制任务主函数
  */
@@ -268,8 +274,8 @@ void MotorCtrlTask_Run(void *argument)
         MotorCtrlTask_UpdateLED2();
         
         // /* 轮电机控制 */
-        // MotorCtrlTask_WheelMotorControl();
-        
+         MotorCtrlTask_WheelMotorControl();
+        MotorCtrlTask_SetWheelSpeed(leftTarget, rightTarget);
         // /* 边刷电机控制 */
         // MotorCtrlTask_BrushMotorControl();
         
@@ -282,14 +288,14 @@ void MotorCtrlTask_Run(void *argument)
          Motor_SetSpeed(&g_pCleanBotApp->pumpMotor, 500);
          Motor_SetSpeed(&g_pCleanBotApp->brushMotorLeft, 500);
          Motor_SetSpeed(&g_pCleanBotApp->brushMotorRight, 500);
-         Motor_SetDirection(&g_pCleanBotApp->wheelMotorLeft, MOTOR_STATE_BACKWARD);
-         Motor_SetDirection(&g_pCleanBotApp->wheelMotorRight, MOTOR_STATE_BACKWARD);
-         Motor_SetSpeed(&g_pCleanBotApp->wheelMotorLeft, 500);
-         Motor_SetSpeed(&g_pCleanBotApp->wheelMotorRight, 500);
+//         Motor_SetDirection(&g_pCleanBotApp->wheelMotorLeft, MOTOR_STATE_BACKWARD);
+//         Motor_SetDirection(&g_pCleanBotApp->wheelMotorRight, MOTOR_STATE_FORWARD);
+//         Motor_SetSpeed(&g_pCleanBotApp->wheelMotorLeft, 200);
+//         Motor_SetSpeed(&g_pCleanBotApp->wheelMotorRight, 200);
         leftCurrentRPM = Encoder_GetSpeed(&g_pCleanBotApp->encoderWheelLeft);
         rightCurrentRPM = Encoder_GetSpeed(&g_pCleanBotApp->encoderWheelRight);
 
-        osDelay(5);  /* 5ms控制周期 */
+        osDelay(2);  /* 5ms控制周期 */
     }
 }
 
