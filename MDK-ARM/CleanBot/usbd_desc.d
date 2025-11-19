@@ -1,46 +1,34 @@
-cleanbot\usbd_desc.o: ../USB_DEVICE/App/usbd_desc.c
-cleanbot\usbd_desc.o: ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_core.h
-cleanbot\usbd_desc.o: ../USB_DEVICE/Target/usbd_conf.h
-cleanbot\usbd_desc.o: D:\Study APP\KEIL\Core\ARM\ARMCC\Bin\..\include\stdio.h
-cleanbot\usbd_desc.o: D:\Study APP\KEIL\Core\ARM\ARMCC\Bin\..\include\stdlib.h
-cleanbot\usbd_desc.o: D:\Study APP\KEIL\Core\ARM\ARMCC\Bin\..\include\string.h
-cleanbot\usbd_desc.o: ../Core/Inc/main.h
-cleanbot\usbd_desc.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h
-cleanbot\usbd_desc.o: ../Core/Inc/stm32f4xx_hal_conf.h
-cleanbot\usbd_desc.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h
-cleanbot\usbd_desc.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_def.h
-cleanbot\usbd_desc.o: ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h
-cleanbot\usbd_desc.o: ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f407xx.h
-cleanbot\usbd_desc.o: ../Drivers/CMSIS/Include/core_cm4.h
-cleanbot\usbd_desc.o: D:\Study APP\KEIL\Core\ARM\ARMCC\Bin\..\include\stdint.h
-cleanbot\usbd_desc.o: ../Drivers/CMSIS/Include/cmsis_version.h
-cleanbot\usbd_desc.o: ../Drivers/CMSIS/Include/cmsis_compiler.h
-cleanbot\usbd_desc.o: ../Drivers/CMSIS/Include/cmsis_armcc.h
-cleanbot\usbd_desc.o: ../Drivers/CMSIS/Include/mpu_armv7.h
-cleanbot\usbd_desc.o: ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/system_stm32f4xx.h
-cleanbot\usbd_desc.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h
-cleanbot\usbd_desc.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy/stm32_hal_legacy.h
-cleanbot\usbd_desc.o: D:\Study APP\KEIL\Core\ARM\ARMCC\Bin\..\include\stddef.h
-cleanbot\usbd_desc.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc_ex.h
-cleanbot\usbd_desc.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio.h
-cleanbot\usbd_desc.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio_ex.h
-cleanbot\usbd_desc.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_exti.h
-cleanbot\usbd_desc.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma.h
-cleanbot\usbd_desc.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma_ex.h
-cleanbot\usbd_desc.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_cortex.h
-cleanbot\usbd_desc.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash.h
-cleanbot\usbd_desc.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ex.h
-cleanbot\usbd_desc.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ramfunc.h
-cleanbot\usbd_desc.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr.h
-cleanbot\usbd_desc.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h
-cleanbot\usbd_desc.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h
-cleanbot\usbd_desc.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h
-cleanbot\usbd_desc.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h
-cleanbot\usbd_desc.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd.h
-cleanbot\usbd_desc.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_usb.h
-cleanbot\usbd_desc.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd_ex.h
-cleanbot\usbd_desc.o: ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_def.h
-cleanbot\usbd_desc.o: ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_ioreq.h
-cleanbot\usbd_desc.o: ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_core.h
-cleanbot\usbd_desc.o: ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_ctlreq.h
-cleanbot\usbd_desc.o: ../USB_DEVICE/App/usbd_desc.h
+cleanbot/usbd_desc.o: ..\USB_DEVICE\App\usbd_desc.c \
+  ..\Middlewares\ST\STM32_USB_Device_Library\Core\Inc\usbd_core.h \
+  ..\USB_DEVICE\Target\usbd_conf.h ..\Core\Inc\main.h \
+  ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal.h \
+  ..\Core\Inc\stm32f4xx_hal_conf.h \
+  ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc.h \
+  ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_def.h \
+  ..\Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f4xx.h \
+  ..\Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f407xx.h \
+  ..\Drivers\CMSIS\Include\core_cm4.h \
+  ..\Drivers\CMSIS\Device\ST\STM32F4xx\Include\system_stm32f4xx.h \
+  ..\Drivers\STM32F4xx_HAL_Driver\Inc\Legacy\stm32_hal_legacy.h \
+  ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc_ex.h \
+  ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_gpio.h \
+  ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_gpio_ex.h \
+  ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_exti.h \
+  ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dma.h \
+  ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dma_ex.h \
+  ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_cortex.h \
+  ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash.h \
+  ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash_ex.h \
+  ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash_ramfunc.h \
+  ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr.h \
+  ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr_ex.h \
+  ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim.h \
+  ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim_ex.h \
+  ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_uart.h \
+  ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pcd.h \
+  ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_usb.h \
+  ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pcd_ex.h \
+  ..\Middlewares\ST\STM32_USB_Device_Library\Core\Inc\usbd_def.h \
+  ..\Middlewares\ST\STM32_USB_Device_Library\Core\Inc\usbd_ioreq.h \
+  ..\Middlewares\ST\STM32_USB_Device_Library\Core\Inc\usbd_ctlreq.h \
+  ..\USB_DEVICE\App\usbd_desc.h

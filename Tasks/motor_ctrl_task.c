@@ -88,8 +88,8 @@ static void MotorCtrlTask_WheelMotorControl(void)
     /* PID控制 - 目标速度转换为RPM（需要根据实际参数计算） */
     /* 简化处理：直接将m/s转换为PWM占空比 */
     /* 这里需要根据实际硬件特性调整转换系数 */
-    float leftTargetRPM = g_MotorCtrl.wheelMotor.leftSpeedMs * 60.0f / (3.14159f * 0.1f);  /* 假设轮子直径0.1m */
-    float rightTargetRPM = g_MotorCtrl.wheelMotor.rightSpeedMs * 60.0f / (3.14159f * 0.1f);
+    float leftTargetRPM = g_MotorCtrl.wheelMotor.leftSpeedMs * 60.0f / (3.14159f * 0.065f);  /* 假设轮子直径0.1m */
+    float rightTargetRPM = g_MotorCtrl.wheelMotor.rightSpeedMs * 60.0f / (3.14159f * 0.065f);
 		
 		watch_target = leftTargetRPM;
     
@@ -107,7 +107,7 @@ static void MotorCtrlTask_WheelMotorControl(void)
     
     /* 设置电机速度和方向 */
     /* 左轮电机 */
-    if (leftTargetRPM >= 0) {
+    if (leftOutput >= 0) {
         /* 正向 */
         Motor_SetDirection(&g_pCleanBotApp->wheelMotorLeft, MOTOR_STATE_FORWARD);
         /* 限制速度范围在0-1000 */
@@ -126,7 +126,7 @@ static void MotorCtrlTask_WheelMotorControl(void)
     }
     
     /* 右轮电机 */
-    if (rightTargetRPM >= 0) {
+    if (rightOutput >= 0) {
         /* 正向 */
         Motor_SetDirection(&g_pCleanBotApp->wheelMotorRight, MOTOR_STATE_FORWARD);
         /* 限制速度范围在0-1000 */
@@ -274,7 +274,7 @@ void MotorCtrlTask_Run(void *argument)
         MotorCtrlTask_UpdateLED2();
         
         // /* 轮电机控制 */
-         MotorCtrlTask_WheelMotorControl();
+        MotorCtrlTask_WheelMotorControl();
         MotorCtrlTask_SetWheelSpeed(leftTarget, rightTarget);
         // /* 边刷电机控制 */
         // MotorCtrlTask_BrushMotorControl();
@@ -290,7 +290,7 @@ void MotorCtrlTask_Run(void *argument)
          Motor_SetSpeed(&g_pCleanBotApp->brushMotorRight, 500);
 //         Motor_SetDirection(&g_pCleanBotApp->wheelMotorLeft, MOTOR_STATE_BACKWARD);
 //         Motor_SetDirection(&g_pCleanBotApp->wheelMotorRight, MOTOR_STATE_FORWARD);
-//         Motor_SetSpeed(&g_pCleanBotApp->wheelMotorLeft, 200);
+ //        Motor_SetSpeed(&g_pCleanBotApp->wheelMotorLeft, 200);
 //         Motor_SetSpeed(&g_pCleanBotApp->wheelMotorRight, 200);
         leftCurrentRPM = Encoder_GetSpeed(&g_pCleanBotApp->encoderWheelLeft);
         rightCurrentRPM = Encoder_GetSpeed(&g_pCleanBotApp->encoderWheelRight);

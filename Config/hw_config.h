@@ -135,9 +135,9 @@ extern TIM_HandleTypeDef htim10;  /* 假设使用TIM10 */
    ============================================ */
 
 /* 编码器参数 */
-#define ENCODER_WHEEL_PPR       13      /* 轮电机编码器每转脉冲数 */
-#define ENCODER_WHEEL_GEAR_RATIO 30    /* 轮电机减速比 */
-#define ENCODER_WHEEL_PULSE_PER_METER  0  /* 轮电机每米脉冲数（需要实际测量后设置） */
+#define ENCODER_WHEEL_PPR       2260      /* 轮电机编码器每转脉冲数 */
+#define ENCODER_WHEEL_GEAR_RATIO 1    /* 轮电机减速比 */
+#define ENCODER_WHEEL_PULSE_PER_METER  11050  /* 轮电机每米脉冲数（需要实际测量后设置） */
 
 #define ENCODER_FAN_PPR         7       /* 风机编码器每转脉冲数 */
 #define ENCODER_FAN_GEAR_RATIO  1       /* 风机减速比 */
@@ -147,14 +147,14 @@ extern TIM_HandleTypeDef htim10;  /* 假设使用TIM10 */
    ============================================ */
 
 /* 左轮PID参数 */
-#define PID_WHEEL_LEFT_KP       1.0f
-#define PID_WHEEL_LEFT_KI       0.1f
-#define PID_WHEEL_LEFT_KD       0.05f
+#define PID_WHEEL_LEFT_KP       100.0f
+#define PID_WHEEL_LEFT_KI       0.7f
+#define PID_WHEEL_LEFT_KD       0.02f
 #define PID_WHEEL_LEFT_OUT_MAX  1000.0f
 #define PID_WHEEL_LEFT_OUT_MIN  -1000.0f
 
 /* 右轮PID参数 */
-#define PID_WHEEL_RIGHT_KP      1.0f
+#define PID_WHEEL_RIGHT_KP      8.0f
 #define PID_WHEEL_RIGHT_KI      0.1f
 #define PID_WHEEL_RIGHT_KD      0.05f
 #define PID_WHEEL_RIGHT_OUT_MAX 1000.0f

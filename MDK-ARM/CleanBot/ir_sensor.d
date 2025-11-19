@@ -1,39 +1,30 @@
-cleanbot\ir_sensor.o: ..\Modules\Sensor\ir_sensor.c
-cleanbot\ir_sensor.o: ..\Modules\Sensor\ir_sensor.h
-cleanbot\ir_sensor.o: ../Core/Inc/main.h
-cleanbot\ir_sensor.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h
-cleanbot\ir_sensor.o: ../Core/Inc/stm32f4xx_hal_conf.h
-cleanbot\ir_sensor.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h
-cleanbot\ir_sensor.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_def.h
-cleanbot\ir_sensor.o: ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h
-cleanbot\ir_sensor.o: ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f407xx.h
-cleanbot\ir_sensor.o: ../Drivers/CMSIS/Include/core_cm4.h
-cleanbot\ir_sensor.o: D:\Study APP\KEIL\Core\ARM\ARMCC\Bin\..\include\stdint.h
-cleanbot\ir_sensor.o: ../Drivers/CMSIS/Include/cmsis_version.h
-cleanbot\ir_sensor.o: ../Drivers/CMSIS/Include/cmsis_compiler.h
-cleanbot\ir_sensor.o: ../Drivers/CMSIS/Include/cmsis_armcc.h
-cleanbot\ir_sensor.o: ../Drivers/CMSIS/Include/mpu_armv7.h
-cleanbot\ir_sensor.o: ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/system_stm32f4xx.h
-cleanbot\ir_sensor.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h
-cleanbot\ir_sensor.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy/stm32_hal_legacy.h
-cleanbot\ir_sensor.o: D:\Study APP\KEIL\Core\ARM\ARMCC\Bin\..\include\stddef.h
-cleanbot\ir_sensor.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc_ex.h
-cleanbot\ir_sensor.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio.h
-cleanbot\ir_sensor.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio_ex.h
-cleanbot\ir_sensor.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_exti.h
-cleanbot\ir_sensor.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma.h
-cleanbot\ir_sensor.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma_ex.h
-cleanbot\ir_sensor.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_cortex.h
-cleanbot\ir_sensor.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash.h
-cleanbot\ir_sensor.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ex.h
-cleanbot\ir_sensor.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ramfunc.h
-cleanbot\ir_sensor.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr.h
-cleanbot\ir_sensor.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h
-cleanbot\ir_sensor.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h
-cleanbot\ir_sensor.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h
-cleanbot\ir_sensor.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h
-cleanbot\ir_sensor.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd.h
-cleanbot\ir_sensor.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_usb.h
-cleanbot\ir_sensor.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd_ex.h
-cleanbot\ir_sensor.o: ../Utils/nec_decode.h
-cleanbot\ir_sensor.o: D:\Study APP\KEIL\Core\ARM\ARMCC\Bin\..\include\stdbool.h
+cleanbot/ir_sensor.o: ..\Modules\Sensor\ir_sensor.c \
+  ..\Modules\Sensor\ir_sensor.h ..\Core\Inc\main.h \
+  ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal.h \
+  ..\Core\Inc\stm32f4xx_hal_conf.h \
+  ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc.h \
+  ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_def.h \
+  ..\Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f4xx.h \
+  ..\Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f407xx.h \
+  ..\Drivers\CMSIS\Include\core_cm4.h \
+  ..\Drivers\CMSIS\Device\ST\STM32F4xx\Include\system_stm32f4xx.h \
+  ..\Drivers\STM32F4xx_HAL_Driver\Inc\Legacy\stm32_hal_legacy.h \
+  ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc_ex.h \
+  ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_gpio.h \
+  ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_gpio_ex.h \
+  ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_exti.h \
+  ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dma.h \
+  ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dma_ex.h \
+  ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_cortex.h \
+  ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash.h \
+  ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash_ex.h \
+  ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash_ramfunc.h \
+  ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr.h \
+  ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr_ex.h \
+  ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim.h \
+  ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim_ex.h \
+  ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_uart.h \
+  ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pcd.h \
+  ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_usb.h \
+  ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pcd_ex.h \
+  ..\Utils\nec_decode.h

@@ -113,6 +113,7 @@ void Motor_InitDualPWM(Motor_t *motor, MotorType_t type, TIM_HandleTypeDef *htim
   * @param  speed: 速度值 (0-1000)
   * @retval None
   */
+uint32_t ccr_left,arr_left=0;
 static void Motor_Private_SetSpeed(Motor_t *motor, int16_t speed)
 {
     if (motor == NULL || motor->htim == NULL) return;
@@ -138,10 +139,14 @@ static void Motor_Private_SetSpeed(Motor_t *motor, int16_t speed)
     
     /* 计算PWM占空比 */
     uint32_t arr = __HAL_TIM_GET_AUTORELOAD(motor->htim);
-    uint32_t ccr = (speed * arr) / 1000;
+    uint32_t ccr = speed *arr/1000 ;
     
     motor->currentSpeed = speed;
     
+		if(motor->type == MOTOR_TYPE_WHEEL)
+		{ccr_left = ccr;
+		arr_left = arr;}
+		
     if (motor->dualPWM) {
         /* 双PWM模式：根据方向设置PWM */
         if (motor->state == MOTOR_STATE_FORWARD) {
@@ -180,67 +185,67 @@ static void Motor_Private_SetDirection(Motor_t *motor, MotorState_t dir)
     
     motor->state = dir;
     
-    if (motor->dualPWM) {
-        /* 双PWM模式：通过PWM控制方向和状态 */
-        uint32_t arr = __HAL_TIM_GET_AUTORELOAD(motor->htim);
-        uint32_t maxCCR = arr;  /* 100%占空比 */
-        
-        switch (dir) {
-            case MOTOR_STATE_FORWARD:
-                /* 正向：根据当前速度设置PWM，如果没有速度则设置为滑行状态 */
-                if (motor->currentSpeed > 0) {
-                    uint32_t ccr = (motor->currentSpeed * arr) / 1000;
-                    __HAL_TIM_SET_COMPARE(motor->htim, motor->pwmChannel, ccr);
-                    __HAL_TIM_SET_COMPARE(motor->htim, motor->pwmChannelB, 0);
-                } else {
-                    /* 速度为0时，设置为滑行状态 */
-                    __HAL_TIM_SET_COMPARE(motor->htim, motor->pwmChannel, 0);
-                    __HAL_TIM_SET_COMPARE(motor->htim, motor->pwmChannelB, 0);
-                }
-                break;
-            case MOTOR_STATE_BACKWARD:
-                /* 反向：根据当前速度设置PWM，如果没有速度则设置为滑行状态 */
-                if (motor->currentSpeed > 0) {
-                    uint32_t ccr = (motor->currentSpeed * arr) / 1000;
-                    __HAL_TIM_SET_COMPARE(motor->htim, motor->pwmChannel, 0);
-                    __HAL_TIM_SET_COMPARE(motor->htim, motor->pwmChannelB, ccr);
-                } else {
-                    /* 速度为0时，设置为滑行状态 */
-                    __HAL_TIM_SET_COMPARE(motor->htim, motor->pwmChannel, 0);
-                    __HAL_TIM_SET_COMPARE(motor->htim, motor->pwmChannelB, 0);
-                }
-                break;
-            case MOTOR_STATE_BRAKE:
-                /* 刹车：两脚均高（100%占空比） */
-                __HAL_TIM_SET_COMPARE(motor->htim, motor->pwmChannel, maxCCR);
-                __HAL_TIM_SET_COMPARE(motor->htim, motor->pwmChannelB, maxCCR);
-                break;
-            case MOTOR_STATE_STOP:
-            default:
-                /* 停止/滑行：两脚均低（0） */
-                __HAL_TIM_SET_COMPARE(motor->htim, motor->pwmChannel, 0);
-                __HAL_TIM_SET_COMPARE(motor->htim, motor->pwmChannelB, 0);
-                break;
-        }
-    } else {
-        /* 单PWM模式：通过GPIO控制方向 */
-        if (motor->dirPort == NULL) return;
-        
-        switch (dir) {
-            case MOTOR_STATE_FORWARD:
-                HAL_GPIO_WritePin(motor->dirPort, motor->dirPin, GPIO_PIN_SET);
-                break;
-            case MOTOR_STATE_BACKWARD:
-                HAL_GPIO_WritePin(motor->dirPort, motor->dirPin, GPIO_PIN_RESET);
-                break;
-            case MOTOR_STATE_STOP:
-            case MOTOR_STATE_BRAKE:
-                HAL_GPIO_WritePin(motor->dirPort, motor->dirPin, GPIO_PIN_RESET);
-                break;
-            default:
-                break;
-        }
-    }
+//    if (motor->dualPWM) {
+//        /* 双PWM模式：通过PWM控制方向和状态 */
+//        uint32_t arr = __HAL_TIM_GET_AUTORELOAD(motor->htim);
+//        uint32_t maxCCR = arr;  /* 100%占空比 */
+//        
+//        switch (dir) {
+//            case MOTOR_STATE_FORWARD:
+//                /* 正向：根据当前速度设置PWM，如果没有速度则设置为滑行状态 */
+//                if (motor->currentSpeed > 0) {
+//                    uint32_t ccr = (motor->currentSpeed * arr) / 1000;
+//                    __HAL_TIM_SET_COMPARE(motor->htim, motor->pwmChannel, ccr);
+//                    __HAL_TIM_SET_COMPARE(motor->htim, motor->pwmChannelB, 0);
+//                } else {
+//                    /* 速度为0时，设置为滑行状态 */
+//                    __HAL_TIM_SET_COMPARE(motor->htim, motor->pwmChannel, 0);
+//                    __HAL_TIM_SET_COMPARE(motor->htim, motor->pwmChannelB, 0);
+//                }
+//                break;
+//            case MOTOR_STATE_BACKWARD:
+//                /* 反向：根据当前速度设置PWM，如果没有速度则设置为滑行状态 */
+//                if (motor->currentSpeed > 0) {
+//                    uint32_t ccr = (motor->currentSpeed * arr) / 1000;
+//                    __HAL_TIM_SET_COMPARE(motor->htim, motor->pwmChannel, 0);
+//                    __HAL_TIM_SET_COMPARE(motor->htim, motor->pwmChannelB, ccr);
+//                } else {
+//                    /* 速度为0时，设置为滑行状态 */
+//                    __HAL_TIM_SET_COMPARE(motor->htim, motor->pwmChannel, 0);
+//                    __HAL_TIM_SET_COMPARE(motor->htim, motor->pwmChannelB, 0);
+//                }
+//                break;
+//            case MOTOR_STATE_BRAKE:
+//                /* 刹车：两脚均高（100%占空比） */
+//                __HAL_TIM_SET_COMPARE(motor->htim, motor->pwmChannel, maxCCR);
+//                __HAL_TIM_SET_COMPARE(motor->htim, motor->pwmChannelB, maxCCR);
+//                break;
+//            case MOTOR_STATE_STOP:
+//            default:
+//                /* 停止/滑行：两脚均低（0） */
+//                __HAL_TIM_SET_COMPARE(motor->htim, motor->pwmChannel, 0);
+//                __HAL_TIM_SET_COMPARE(motor->htim, motor->pwmChannelB, 0);
+//                break;
+//        }
+//    } else {
+//        /* 单PWM模式：通过GPIO控制方向 */
+//        if (motor->dirPort == NULL) return;
+//        
+//        switch (dir) {
+//            case MOTOR_STATE_FORWARD:
+//                HAL_GPIO_WritePin(motor->dirPort, motor->dirPin, GPIO_PIN_SET);
+//                break;
+//            case MOTOR_STATE_BACKWARD:
+//                HAL_GPIO_WritePin(motor->dirPort, motor->dirPin, GPIO_PIN_RESET);
+//                break;
+//            case MOTOR_STATE_STOP:
+//            case MOTOR_STATE_BRAKE:
+//                HAL_GPIO_WritePin(motor->dirPort, motor->dirPin, GPIO_PIN_RESET);
+//                break;
+//            default:
+//                break;
+//        }
+//    }
 }
 
 /**

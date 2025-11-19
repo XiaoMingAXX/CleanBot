@@ -1,84 +1,57 @@
-cleanbot\gpio.o: ../Core/Src/gpio.c
-cleanbot\gpio.o: ../Core/Inc/gpio.h
-cleanbot\gpio.o: ../Core/Inc/main.h
-cleanbot\gpio.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h
-cleanbot\gpio.o: ../Core/Inc/stm32f4xx_hal_conf.h
-cleanbot\gpio.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h
-cleanbot\gpio.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_def.h
-cleanbot\gpio.o: ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h
-cleanbot\gpio.o: ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f407xx.h
-cleanbot\gpio.o: ../Drivers/CMSIS/Include/core_cm4.h
-cleanbot\gpio.o: D:\Study APP\KEIL\Core\ARM\ARMCC\Bin\..\include\stdint.h
-cleanbot\gpio.o: ../Drivers/CMSIS/Include/cmsis_version.h
-cleanbot\gpio.o: ../Drivers/CMSIS/Include/cmsis_compiler.h
-cleanbot\gpio.o: ../Drivers/CMSIS/Include/cmsis_armcc.h
-cleanbot\gpio.o: ../Drivers/CMSIS/Include/mpu_armv7.h
-cleanbot\gpio.o: ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/system_stm32f4xx.h
-cleanbot\gpio.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h
-cleanbot\gpio.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy/stm32_hal_legacy.h
-cleanbot\gpio.o: D:\Study APP\KEIL\Core\ARM\ARMCC\Bin\..\include\stddef.h
-cleanbot\gpio.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc_ex.h
-cleanbot\gpio.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio.h
-cleanbot\gpio.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio_ex.h
-cleanbot\gpio.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_exti.h
-cleanbot\gpio.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma.h
-cleanbot\gpio.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma_ex.h
-cleanbot\gpio.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_cortex.h
-cleanbot\gpio.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash.h
-cleanbot\gpio.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ex.h
-cleanbot\gpio.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ramfunc.h
-cleanbot\gpio.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr.h
-cleanbot\gpio.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h
-cleanbot\gpio.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h
-cleanbot\gpio.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h
-cleanbot\gpio.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h
-cleanbot\gpio.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd.h
-cleanbot\gpio.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_usb.h
-cleanbot\gpio.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd_ex.h
-cleanbot\gpio.o: ../Modules/Sensor/sensor_manager.h
-cleanbot\gpio.o: ../Config/cleanbot_config.h
-cleanbot\gpio.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h
-cleanbot\gpio.o: ../Core/Inc/FreeRTOSConfig.h
-cleanbot\gpio.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h
-cleanbot\gpio.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/portable.h
-cleanbot\gpio.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/deprecated_definitions.h
-cleanbot\gpio.o: ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F/portmacro.h
-cleanbot\gpio.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/mpu_wrappers.h
-cleanbot\gpio.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/task.h
-cleanbot\gpio.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/list.h
-cleanbot\gpio.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/queue.h
-cleanbot\gpio.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/semphr.h
-cleanbot\gpio.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/timers.h
-cleanbot\gpio.o: ../Config/hw_config.h
-cleanbot\gpio.o: ../Config/system_config.h
-cleanbot\gpio.o: ../Common/common_def.h
-cleanbot\gpio.o: D:\Study APP\KEIL\Core\ARM\ARMCC\Bin\..\include\stdbool.h
-cleanbot\gpio.o: ../Common/common_utils.h
-cleanbot\gpio.o: ../Modules/Motor/motor.h
-cleanbot\gpio.o: ../Modules/Encoder/encoder.h
-cleanbot\gpio.o: ../Modules/PID/pid_controller.h
-cleanbot\gpio.o: ../Modules/Sensor/ir_sensor.h
-cleanbot\gpio.o: ../Utils/nec_decode.h
-cleanbot\gpio.o: ../Modules/Sensor/photo_gate.h
-cleanbot\gpio.o: ../Modules/Indicator/led.h
-cleanbot\gpio.o: ../Modules/Indicator/buzzer.h
-cleanbot\gpio.o: ../Modules/Communication/usb_comm.h
-cleanbot\gpio.o: ../USB_DEVICE/App/usb_device.h
-cleanbot\gpio.o: ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_def.h
-cleanbot\gpio.o: ../USB_DEVICE/Target/usbd_conf.h
-cleanbot\gpio.o: D:\Study APP\KEIL\Core\ARM\ARMCC\Bin\..\include\stdio.h
-cleanbot\gpio.o: D:\Study APP\KEIL\Core\ARM\ARMCC\Bin\..\include\stdlib.h
-cleanbot\gpio.o: D:\Study APP\KEIL\Core\ARM\ARMCC\Bin\..\include\string.h
-cleanbot\gpio.o: ../USB_DEVICE/App/usbd_cdc_if.h
-cleanbot\gpio.o: ../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc/usbd_cdc.h
-cleanbot\gpio.o: ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_ioreq.h
-cleanbot\gpio.o: ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_core.h
-cleanbot\gpio.o: ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_ioreq.h
-cleanbot\gpio.o: ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_ctlreq.h
-cleanbot\gpio.o: ../Utils/ring_buffer.h
-cleanbot\gpio.o: ../Application/CleanBotApp.h
-cleanbot\gpio.o: ../Tasks/motor_ctrl_task.h
-cleanbot\gpio.o: ../Config/cleanbot_config.h
-cleanbot\gpio.o: ../Modules/Sensor/sensor_manager.h
-cleanbot\gpio.o: ../Tasks/sensor_task.h
-cleanbot\gpio.o: ../Tasks/usb_comm_task.h
+cleanbot/gpio.o: ..\Core\Src\gpio.c ..\Core\Inc\gpio.h ..\Core\Inc\main.h \
+  ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal.h \
+  ..\Core\Inc\stm32f4xx_hal_conf.h \
+  ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc.h \
+  ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_def.h \
+  ..\Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f4xx.h \
+  ..\Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f407xx.h \
+  ..\Drivers\CMSIS\Include\core_cm4.h \
+  ..\Drivers\CMSIS\Device\ST\STM32F4xx\Include\system_stm32f4xx.h \
+  ..\Drivers\STM32F4xx_HAL_Driver\Inc\Legacy\stm32_hal_legacy.h \
+  ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc_ex.h \
+  ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_gpio.h \
+  ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_gpio_ex.h \
+  ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_exti.h \
+  ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dma.h \
+  ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dma_ex.h \
+  ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_cortex.h \
+  ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash.h \
+  ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash_ex.h \
+  ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash_ramfunc.h \
+  ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr.h \
+  ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr_ex.h \
+  ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim.h \
+  ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim_ex.h \
+  ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_uart.h \
+  ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pcd.h \
+  ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_usb.h \
+  ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pcd_ex.h \
+  ..\Modules\Sensor\sensor_manager.h ..\Config\cleanbot_config.h \
+  ..\Middlewares\Third_Party\FreeRTOS\Source\include\FreeRTOS.h \
+  ..\Core\Inc\FreeRTOSConfig.h \
+  ..\Middlewares\Third_Party\FreeRTOS\Source\include\projdefs.h \
+  ..\Middlewares\Third_Party\FreeRTOS\Source\include\portable.h \
+  ..\Middlewares\Third_Party\FreeRTOS\Source\include\deprecated_definitions.h \
+  ..\Middlewares\Third_Party\FreeRTOS\Source\portable\RVDS\ARM_CM4F\portmacro.h \
+  ..\Middlewares\Third_Party\FreeRTOS\Source\include\mpu_wrappers.h \
+  ..\Middlewares\Third_Party\FreeRTOS\Source\include\task.h \
+  ..\Middlewares\Third_Party\FreeRTOS\Source\include\list.h \
+  ..\Middlewares\Third_Party\FreeRTOS\Source\include\queue.h \
+  ..\Middlewares\Third_Party\FreeRTOS\Source\include\semphr.h \
+  ..\Middlewares\Third_Party\FreeRTOS\Source\include\timers.h \
+  ..\Config\hw_config.h ..\Config\system_config.h ..\Common\common_def.h \
+  ..\Common\common_utils.h ..\Modules\Motor\motor.h \
+  ..\Modules\Encoder\encoder.h ..\Modules\PID\pid_controller.h \
+  ..\Modules\Sensor\ir_sensor.h ..\Utils\nec_decode.h \
+  ..\Modules\Sensor\photo_gate.h ..\Modules\Indicator\led.h \
+  ..\Modules\Indicator\buzzer.h ..\Modules\Communication\usb_comm.h \
+  ..\USB_DEVICE\App\usb_device.h \
+  ..\Middlewares\ST\STM32_USB_Device_Library\Core\Inc\usbd_def.h \
+  ..\USB_DEVICE\Target\usbd_conf.h ..\USB_DEVICE\App\usbd_cdc_if.h \
+  ..\Middlewares\ST\STM32_USB_Device_Library\Class\CDC\Inc\usbd_cdc.h \
+  ..\Middlewares\ST\STM32_USB_Device_Library\Core\Inc\usbd_ioreq.h \
+  ..\Middlewares\ST\STM32_USB_Device_Library\Core\Inc\usbd_core.h \
+  ..\Middlewares\ST\STM32_USB_Device_Library\Core\Inc\usbd_ctlreq.h \
+  ..\Utils\ring_buffer.h ..\Application\CleanBotApp.h \
+  ..\Tasks\motor_ctrl_task.h ..\Tasks\sensor_task.h \
+  ..\Tasks\usb_comm_task.h

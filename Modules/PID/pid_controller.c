@@ -35,8 +35,8 @@ void PID_Init(PIDController_t *pid, float kp, float ki, float kd)
     pid->output = 0.0f;
     pid->outputMax = 1000.0f;
     pid->outputMin = -1000.0f;
-    pid->integralMax = 1000.0f;
-    pid->integralMin = -1000.0f;
+    pid->integralMax = 500.0f;
+    pid->integralMin = -500.0f;
     pid->lastTime = osKernelGetTickCount();
     pid->enabled = true;
 }
@@ -134,8 +134,25 @@ float PID_Compute(PIDController_t *pid, float current)
     pid->derivative = (pid->error - pid->lastError) / dt;
     float dTerm = pid->kd * pid->derivative;
     
+
     /* 计算输出 */
     pid->output = pTerm + iTerm + dTerm;
+		
+		if(pid->target!=0)
+		{
+			if(pid->output>0)
+			{
+				pid->output+=200;
+			}
+			else if(pid->output<0)
+			{
+				pid->output-=200;
+			}
+			else
+			{
+			
+			}
+		}
     
     /* 输出限幅 */
     if (pid->output > pid->outputMax) {
@@ -143,6 +160,8 @@ float PID_Compute(PIDController_t *pid, float current)
     } else if (pid->output < pid->outputMin) {
         pid->output = pid->outputMin;
     }
+		
+		
     
     pid->lastError = pid->error;
     pid->lastTime = currentTime;
