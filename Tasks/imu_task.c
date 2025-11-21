@@ -218,7 +218,7 @@ void IMUTask_Run(void *argument)
 		wit_consume_ring();
 
 		/* 200Hz上报 */
-		uint32_t now = HAL_GetTick();
+	uint32_t now = HAL_GetTick();
 		if ((now - lastTick) >= IMU_TELEMETRY_PERIOD_MS) {
 			lastTick += IMU_TELEMETRY_PERIOD_MS;
 			usb_send_imu_packet();
