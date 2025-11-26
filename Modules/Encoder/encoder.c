@@ -34,6 +34,7 @@ void Encoder_Init(Encoder_t *encoder, EncoderType_t type, TIM_HandleTypeDef *hti
     encoder->overflowCount = 0;
     encoder->speed = 0.0f;
     encoder->speedMs = 0.0f;
+    encoder->angle = 0.0f;
     encoder->lastUpdateTime = 0;
     encoder->ppr = ppr;
     encoder->gearRatio = gearRatio;
@@ -91,6 +92,7 @@ void Encoder_Reset(Encoder_t *encoder)
     encoder->lastPulseCountISR = 0;
     encoder->overflowCount = 0;
     encoder->speed = 0.0f;
+    encoder->angle = 0.0f;
     
     if (encoder->htim != NULL) {
         __HAL_TIM_SET_COUNTER(encoder->htim, 0);
@@ -181,6 +183,12 @@ void Encoder_Update(Encoder_t *encoder)
             }
         }
         
+        /* 更新角度（弧度制）：角度 = (累计脉冲数 / 每转脉冲数) * 2π */
+        if (encoder->ppr > 0) {
+            int32_t totalPulses = Encoder_GetPulseCount(encoder);
+            encoder->angle = ((float)totalPulses / (float)encoder->ppr) * 6.28318530718f;  /* 2π ≈ 6.28318530718 */
+        }
+        
         encoder->lastUpdateTime = currentTime;
     }
 }
@@ -205,6 +213,24 @@ float Encoder_GetSpeedMs(Encoder_t *encoder)
 {
     if (encoder == NULL) return 0.0f;
     return encoder->speedMs;
+}
+
+/**
+ * @brief  获取角度
+ * @param  encoder: 编码器对象指针
+ * @retval 角度 (弧度制，连续累加，可以是任意实数)
+ */
+float Encoder_GetAngle(Encoder_t *encoder)
+{
+    if (encoder == NULL) return 0.0f;
+    
+    /* 实时计算角度，确保获取最新值 */
+    if (encoder->ppr > 0) {
+        int32_t totalPulses = Encoder_GetPulseCount(encoder);
+        encoder->angle = ((float)totalPulses / (float)encoder->ppr) * 6.28318530718f;  /* 2π ≈ 6.28318530718 */
+    }
+    
+    return encoder->angle;
 }
 static int32_t watch_count_now;
 /**
@@ -242,6 +268,11 @@ void Encoder_On1kHzTick(Encoder_t *encoder)
         /* 非轮式不更新m/s */
     } else {
         encoder->speedMs = 0.0f;
+    }
+    
+    /* 更新角度（弧度制）：角度 = (累计脉冲数 / 每转脉冲数) * 2π */
+    if (encoder->ppr > 0) {
+        encoder->angle = ((float)currentCount / (float)encoder->ppr) * 6.28318530718f;  /* 2π ≈ 6.28318530718 */
     }
 }
 

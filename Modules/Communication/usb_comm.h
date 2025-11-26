@@ -23,6 +23,7 @@ extern "C" {
 /* USB通信配置 */
 #define USB_COMM_RX_BUFFER_SIZE     512  /* 接收缓冲区大小 */
 #define USB_COMM_TX_BUFFER_SIZE     512  /* 发送缓冲区大小 */
+#define USB_COMM_TX_PACKET_SIZE      64  /* 单次USB包最大64字节 */
 
 /* USB通信结构体 */
 typedef struct {
@@ -30,8 +31,10 @@ typedef struct {
     RingBuffer_t txBuffer;         /* 发送缓冲区 */
     uint8_t rxData[USB_COMM_RX_BUFFER_SIZE];  /* 接收数据缓冲区 */
     uint8_t txData[USB_COMM_TX_BUFFER_SIZE];  /* 发送数据缓冲区 */
+    uint8_t txPacket[USB_COMM_TX_PACKET_SIZE];/* 正在发送的USB包 */
     bool connected;                /* USB连接状态 */
     bool enabled;                  /* 使能标志 */
+    bool txBusy;                   /* USB端点是否繁忙 */
 } USB_Comm_t;
 
 /* 函数声明 */

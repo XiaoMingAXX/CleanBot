@@ -206,6 +206,12 @@ static void MotorCtrlTask_PumpMotorControl(void)
         case PUMP_MOTOR_LEVEL_HIGH:
             speed = PUMP_MOTOR_SPEED_HIGH;
             break;
+        case PUMP_MOTOR_LEVEL_TURBO:
+            speed = PUMP_MOTOR_SPEED_TURBO;
+            break;
+        case PUMP_MOTOR_LEVEL_ULTRA:
+            speed = PUMP_MOTOR_SPEED_ULTRA;
+            break;
     }
     Motor_SetSpeed(&g_pCleanBotApp->pumpMotor, speed);
     Motor_SetDirection(&g_pCleanBotApp->pumpMotor, MOTOR_STATE_FORWARD);
@@ -275,25 +281,25 @@ void MotorCtrlTask_Run(void *argument)
         
         // /* 轮电机控制 */
         MotorCtrlTask_WheelMotorControl();
-        MotorCtrlTask_SetWheelSpeed(leftTarget, rightTarget);
+        // MotorCtrlTask_SetWheelSpeed(leftTarget, rightTarget);
         // /* 边刷电机控制 */
-        // MotorCtrlTask_BrushMotorControl();
+        MotorCtrlTask_BrushMotorControl();
         
         // /* 水箱增压电机控制 */
-        // MotorCtrlTask_PumpMotorControl();
+        MotorCtrlTask_PumpMotorControl();
         
         // /* 风机控制 */
-         //MotorCtrlTask_FanMotorControl();
-         Motor_SetSpeed(&g_pCleanBotApp->fanMotor, 500);
-         Motor_SetSpeed(&g_pCleanBotApp->pumpMotor, 500);
-         Motor_SetSpeed(&g_pCleanBotApp->brushMotorLeft, 500);
-         Motor_SetSpeed(&g_pCleanBotApp->brushMotorRight, 500);
+         MotorCtrlTask_FanMotorControl();
+        //  Motor_SetSpeed(&g_pCleanBotApp->fanMotor, 500);
+        //  Motor_SetSpeed(&g_pCleanBotApp->pumpMotor, 500);
+        //  Motor_SetSpeed(&g_pCleanBotApp->brushMotorLeft, 500);
+        //  Motor_SetSpeed(&g_pCleanBotApp->brushMotorRight, 500);
 //         Motor_SetDirection(&g_pCleanBotApp->wheelMotorLeft, MOTOR_STATE_BACKWARD);
 //         Motor_SetDirection(&g_pCleanBotApp->wheelMotorRight, MOTOR_STATE_FORWARD);
  //        Motor_SetSpeed(&g_pCleanBotApp->wheelMotorLeft, 200);
 //         Motor_SetSpeed(&g_pCleanBotApp->wheelMotorRight, 200);
-        leftCurrentRPM = Encoder_GetSpeed(&g_pCleanBotApp->encoderWheelLeft);
-        rightCurrentRPM = Encoder_GetSpeed(&g_pCleanBotApp->encoderWheelRight);
+        // leftCurrentRPM = Encoder_GetSpeed(&g_pCleanBotApp->encoderWheelLeft);
+        // rightCurrentRPM = Encoder_GetSpeed(&g_pCleanBotApp->encoderWheelRight);
 
         osDelay(2);  /* 5ms控制周期 */
     }

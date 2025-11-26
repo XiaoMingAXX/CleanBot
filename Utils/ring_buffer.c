@@ -64,6 +64,31 @@ bool RingBuffer_Put(RingBuffer_t *rb, uint8_t data)
 }
 
 /**
+ * @brief  从缓冲区前端插入一个字节（逆向写入，用于回滚数据）
+ * @param  rb: 环形缓冲区对象指针
+ * @param  data: 数据
+ * @retval 是否成功
+ */
+bool RingBuffer_PutFront(RingBuffer_t *rb, uint8_t data)
+{
+    if (rb == NULL || rb->buffer == NULL) return false;
+    
+    if (RingBuffer_IsFull(rb)) {
+        return false;
+    }
+    
+    if (rb->tail == 0) {
+        rb->tail = rb->size - 1;
+    } else {
+        rb->tail--;
+    }
+    rb->buffer[rb->tail] = data;
+    rb->count++;
+    
+    return true;
+}
+
+/**
   * @brief  读取一个字节
   * @param  rb: 环形缓冲区对象指针
   * @param  data: 数据指针

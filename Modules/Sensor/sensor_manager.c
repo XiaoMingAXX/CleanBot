@@ -62,6 +62,11 @@ void SensorManager_Init(SensorManager_t *manager)
     manager->photoGateLeftBlocked = false;
     manager->photoGateRightBlocked = false;
     
+    /* 初始化下视传感器状态 */
+    manager->underLeftSuspended = false;
+    manager->underRightSuspended = false;
+    manager->underCenterSuspended = false;
+    
     /* 初始化红外传感器状态 */
     for (int i = 0; i < 4; i++) {
         manager->irSensors[i].dataReady = false;
@@ -336,6 +341,72 @@ void SensorManager_CheckButtonDebounce(SensorManager_t *manager)
             manager->button2.debouncePending = false;
         }
     }
+}
+
+/**
+ * @brief  下视传感器中断处理（左前）
+ */
+void SensorManager_IRQHandler_UnderLeft(void)
+{
+    BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+    SensorEvent_t event;
+    
+    /* 读取GPIO状态（高电平表示悬空） */
+    bool isSuspended = HAL_GPIO_ReadPin(L_FOLLOW_CHECK_SIGNAL_GPIO_Port, L_FOLLOW_CHECK_SIGNAL_Pin) == GPIO_PIN_SET;
+    
+    event.type = SENSOR_EVENT_UNDER_LEFT;
+    event.timestamp = HAL_GetTick();
+    event.data = isSuspended ? 1 : 0;  /* 1=悬空，0=地面 */
+    
+    /* 更新状态 */
+    g_SensorManager.underLeftSuspended = isSuspended;
+    
+    xQueueSendFromISR(g_SensorManager.eventQueue, &event, &xHigherPriorityTaskWoken);
+    portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
+}
+
+/**
+ * @brief  下视传感器中断处理（右前）
+ */
+void SensorManager_IRQHandler_UnderRight(void)
+{
+    BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+    SensorEvent_t event;
+    
+    /* 读取GPIO状态（高电平表示悬空） */
+    bool isSuspended = HAL_GPIO_ReadPin(R_FOLLOW_CHECK_SIGNAL_GPIO_Port, R_FOLLOW_CHECK_SIGNAL_Pin) == GPIO_PIN_SET;
+    
+    event.type = SENSOR_EVENT_UNDER_RIGHT;
+    event.timestamp = HAL_GetTick();
+    event.data = isSuspended ? 1 : 0;  /* 1=悬空，0=地面 */
+    
+    /* 更新状态 */
+    g_SensorManager.underRightSuspended = isSuspended;
+    
+    xQueueSendFromISR(g_SensorManager.eventQueue, &event, &xHigherPriorityTaskWoken);
+    portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
+}
+
+/**
+ * @brief  下视传感器中断处理（中间）
+ */
+void SensorManager_IRQHandler_UnderCenter(void)
+{
+    BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+    SensorEvent_t event;
+    
+    /* 读取GPIO状态（高电平表示悬空） */
+    bool isSuspended = HAL_GPIO_ReadPin(S_FOLLOW_CHECK_SIGNAL_GPIO_Port, S_FOLLOW_CHECK_SIGNAL_Pin) == GPIO_PIN_SET;
+    
+    event.type = SENSOR_EVENT_UNDER_CENTER;
+    event.timestamp = HAL_GetTick();
+    event.data = isSuspended ? 1 : 0;  /* 1=悬空，0=地面 */
+    
+    /* 更新状态 */
+    g_SensorManager.underCenterSuspended = isSuspended;
+    
+    xQueueSendFromISR(g_SensorManager.eventQueue, &event, &xHigherPriorityTaskWoken);
+    portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
 }
 
 /**

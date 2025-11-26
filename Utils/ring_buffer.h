@@ -37,6 +37,7 @@ bool RingBuffer_IsFull(RingBuffer_t *rb);
 bool RingBuffer_IsEmpty(RingBuffer_t *rb);
 uint32_t RingBuffer_PutData(RingBuffer_t *rb, const uint8_t *data, uint32_t len);
 uint32_t RingBuffer_GetData(RingBuffer_t *rb, uint8_t *data, uint32_t len);
+bool RingBuffer_PutFront(RingBuffer_t *rb, uint8_t data);
 
 #ifdef __cplusplus
 }

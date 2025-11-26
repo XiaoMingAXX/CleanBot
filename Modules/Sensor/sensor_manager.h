@@ -33,7 +33,10 @@ typedef enum {
     SENSOR_EVENT_BUTTON1_CLICK,        /* 按钮1单击事件 */
     SENSOR_EVENT_BUTTON1_DOUBLE_CLICK, /* 按钮1双击事件 */
     SENSOR_EVENT_BUTTON2_CLICK,        /* 按钮2单击事件 */
-    SENSOR_EVENT_BUTTON2_DOUBLE_CLICK  /* 按钮2双击事件 */
+    SENSOR_EVENT_BUTTON2_DOUBLE_CLICK, /* 按钮2双击事件 */
+    SENSOR_EVENT_UNDER_LEFT,           /* 左前下视传感器事件 */
+    SENSOR_EVENT_UNDER_RIGHT,          /* 右前下视传感器事件 */
+    SENSOR_EVENT_UNDER_CENTER          /* 中间下视传感器事件 */
 } SensorEventType_t;
 
 /* 传感器事件 */
@@ -65,6 +68,11 @@ typedef struct {
     bool photoGateLeftBlocked;     /* 左侧光电门被遮挡 */
     bool photoGateRightBlocked;    /* 右侧光电门被遮挡 */
     
+    /* 下视传感器状态 */
+    bool underLeftSuspended;       /* 左前下视传感器悬空（高电平） */
+    bool underRightSuspended;       /* 右前下视传感器悬空（高电平） */
+    bool underCenterSuspended;     /* 中间下视传感器悬空（高电平） */
+    
     /* NEC解码数据 */
     struct {
         bool dataReady;            /* 数据就绪 */
@@ -88,6 +96,9 @@ void SensorManager_IRQHandler_PhotoGate_Left(void);
 void SensorManager_IRQHandler_PhotoGate_Right(void);
 void SensorManager_IRQHandler_Button1(void);
 void SensorManager_IRQHandler_Button2(void);
+void SensorManager_IRQHandler_UnderLeft(void);
+void SensorManager_IRQHandler_UnderRight(void);
+void SensorManager_IRQHandler_UnderCenter(void);
 
 /* 获取事件（在Sensor任务中调用） */
 bool SensorManager_GetEvent(SensorManager_t *manager, SensorEvent_t *event, uint32_t timeout);

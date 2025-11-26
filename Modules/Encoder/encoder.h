@@ -35,6 +35,7 @@ typedef struct {
     int32_t overflowCount;         /* 溢出次数 */
     float speed;                   /* 当前速度 (RPM) */
     float speedMs;                 /* 当前速度 (m/s) - 仅用于轮电机 */
+    float angle;                   /* 当前角度 (弧度制，连续累加) */
     uint32_t lastUpdateTime;       /* 上次更新时间 */
     uint16_t ppr;                  /* 每转脉冲数 (Pulse Per Revolution) */
     uint16_t gearRatio;            /* 减速比 */
@@ -52,6 +53,7 @@ void Encoder_Reset(Encoder_t *encoder);
 int32_t Encoder_GetPulseCount(Encoder_t *encoder);
 float Encoder_GetSpeed(Encoder_t *encoder);  /* 获取速度 (RPM) */
 float Encoder_GetSpeedMs(Encoder_t *encoder);  /* 获取速度 (m/s) - 仅用于轮电机 */
+float Encoder_GetAngle(Encoder_t *encoder);  /* 获取角度 (弧度制) */
 void Encoder_Update(Encoder_t *encoder);     /* 更新速度计算 */
 int32_t Encoder_GetDeltaCount(Encoder_t *encoder);  /* 获取增量脉冲数 */
 

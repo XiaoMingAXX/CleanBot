@@ -24,6 +24,7 @@ extern "C" {
 #include "buzzer.h"
 #include "usb_comm.h"
 #include "motor_ctrl_task.h"
+#include "ir_homing.h"
 #include <stdint.h>
 #include <stdbool.h>
 
@@ -64,6 +65,11 @@ typedef struct {
     PhotoGate_t photoGateLeft;     /* 左侧光电门 */
     PhotoGate_t photoGateRight;    /* 右侧光电门 */
     
+    /* 下视传感器状态 */
+    bool underLeftSuspended;       /* 左前下视传感器悬空（高电平） */
+    bool underRightSuspended;      /* 右前下视传感器悬空（高电平） */
+    bool underCenterSuspended;     /* 中间下视传感器悬空（高电平） */
+    
     /* 指示器 */
     LED_t led1;                    /* LED1 */
     LED_t led2;                    /* LED2 */
@@ -73,6 +79,9 @@ typedef struct {
     
     /* 通信 */
     USB_Comm_t usbComm;            /* USB通信 */
+    
+    /* 回冲定位 */
+    IRHoming_t irHoming;           /* 红外回冲定位模块 */
     
     /* 状态 */
     CleanBotState_t state;         /* 当前状态 */

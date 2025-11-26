@@ -45,10 +45,14 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
             SensorManager_IRQHandler_IR_Right();
             break;
         case L_FOLLOW_CHECK_SIGNAL_Pin:
+            /* 同时处理NEC解码和下视检测 */
             SensorManager_IRQHandler_IR_FrontLeft();
+            SensorManager_IRQHandler_UnderLeft();
             break;
         case R_FOLLOW_CHECK_SIGNAL_Pin:
+            /* 同时处理NEC解码和下视检测 */
             SensorManager_IRQHandler_IR_FrontRight();
+            SensorManager_IRQHandler_UnderRight();
             break;
         case IFHIT_L_Pin:
             SensorManager_IRQHandler_PhotoGate_Left();
@@ -61,6 +65,9 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
             break;
         case BUTTON2_Pin:
             SensorManager_IRQHandler_Button2();
+            break;
+        case S_FOLLOW_CHECK_SIGNAL_Pin:
+            SensorManager_IRQHandler_UnderCenter();
             break;
         default:
             break;

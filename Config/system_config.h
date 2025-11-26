@@ -76,6 +76,12 @@ extern "C" {
 #define DEBUG_SENSOR                1
 #define DEBUG_USB_COMM              1
 
+/* USB通信调试模式控制：
+ * 1 = 调试模式（USB断连不触发安全停机）
+ * 0 = 量产/安全模式（USB断连触发整机安全停机）
+ */
+#define USB_COMM_DEBUG_MODE         DEBUG_ENABLE
+
 /* 调试输出方式 */
 #define DEBUG_USE_USB               1
 #define DEBUG_USE_UART              0

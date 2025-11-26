@@ -10,13 +10,8 @@
 #include "usart.h"
 #include "stm32f4xx_hal.h"
 #include "ring_buffer.h"
-#include "usb_comm.h"
-#include "CleanBotApp.h"
 #include <string.h>
 #include <stdbool.h>
-
-/* 外部应用对象 */
-extern CleanBotApp_t *g_pCleanBotApp;
 
 /* ---------------- 配置区 ---------------- */
 #define IMU_UART_HANDLE                huart3
@@ -30,13 +25,6 @@ extern CleanBotApp_t *g_pCleanBotApp;
 #define WIT_ID_ANGLE                   0x53
 #define WIT_FRAME_LEN                  11
 
-/* USB打包：沿用0xAA ... 0x55的简单帧，用自定义命令0x10 */
-#define USB_PKT_HEAD                   0xAA
-#define USB_PKT_TAIL                   0x55
-#define USB_CMD_IMU_DATA               0x10
-
-/* 200Hz 上发，周期5ms */
-#define IMU_TELEMETRY_PERIOD_MS        5
 /* -------------------------------------- */
 
 /* DMA接收临时缓冲（HAL UART RxEvent DMA to IDLE使用） */
@@ -132,36 +120,6 @@ static void wit_consume_ring(void)
 	}
 }
 
-/* USB发包工具（与 usb_comm_task 的打包格式保持一致） */
-static uint8_t usb_calc_checksum(const uint8_t *data, uint32_t len)
-{
-	uint8_t cs = 0;
-	for (uint32_t i = 0; i < len; i++) cs ^= data[i];
-	return cs;
-}
-
-static void usb_send_imu_packet(void)
-{
-	if (g_pCleanBotApp == NULL) return;
-	/* 9个float：ax,ay,az,gx,gy,gz,roll,pitch,yaw 共36字节 */
-	uint8_t payload[36];
-	float vals[9];
-	vals[0] = s_ax; vals[1] = s_ay; vals[2] = s_az;
-	vals[3] = s_gx; vals[4] = s_gy; vals[5] = s_gz;
-	vals[6] = s_roll; vals[7] = s_pitch; vals[8] = s_yaw;
-	memcpy(payload, vals, sizeof(payload));
-
-	uint8_t packet[64];
-	uint32_t idx = 0;
-	packet[idx++] = USB_PKT_HEAD;
-	packet[idx++] = USB_CMD_IMU_DATA;
-	packet[idx++] = (uint8_t)sizeof(payload);
-	memcpy(&packet[idx], payload, sizeof(payload)); idx += sizeof(payload);
-	uint8_t cs = usb_calc_checksum(&packet[1], idx - 1);
-	packet[idx++] = cs;
-	packet[idx++] = USB_PKT_TAIL;
-	USB_Comm_Send(&g_pCleanBotApp->usbComm, packet, idx);
-}
 
 /* 初始化：启动DMA接收到IDLE */
 static void imu_uart_start_rx_to_idle(void)
@@ -212,17 +170,9 @@ void IMUTask_Run(void *argument)
 	RingBuffer_Init(&s_rxRing, s_rxRingStorage, IMU_RING_BUFFER_SIZE);
 	imu_uart_start_rx_to_idle();
 
-	uint32_t lastTick = HAL_GetTick();
 	for (;;) {
 		/* 消费解析字节流 */
 		wit_consume_ring();
-
-		/* 200Hz上报 */
-	uint32_t now = HAL_GetTick();
-		if ((now - lastTick) >= IMU_TELEMETRY_PERIOD_MS) {
-			lastTick += IMU_TELEMETRY_PERIOD_MS;
-			usb_send_imu_packet();
-		}
 		osDelay(1);
 	}
 }

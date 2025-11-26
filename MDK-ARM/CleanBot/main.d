@@ -15,6 +15,7 @@ cleanbot/main.o: ..\Core\Src\main.c ..\Core\Inc\main.h \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dma.h \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dma_ex.h \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_cortex.h \
+  ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_crc.h \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash.h \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash_ex.h \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash_ramfunc.h \
@@ -37,8 +38,8 @@ cleanbot/main.o: ..\Core\Src\main.c ..\Core\Inc\main.h \
   ..\Middlewares\Third_Party\FreeRTOS\Source\include\task.h \
   ..\Middlewares\Third_Party\FreeRTOS\Source\include\list.h \
   ..\Middlewares\Third_Party\FreeRTOS\Source\CMSIS_RTOS_V2\cmsis_os2.h \
-  ..\Core\Inc\dma.h ..\Core\Inc\tim.h ..\Core\Inc\usart.h \
-  ..\USB_DEVICE\App\usb_device.h \
+  ..\Core\Inc\crc.h ..\Core\Inc\dma.h ..\Core\Inc\tim.h \
+  ..\Core\Inc\usart.h ..\USB_DEVICE\App\usb_device.h \
   ..\Middlewares\ST\STM32_USB_Device_Library\Core\Inc\usbd_def.h \
   ..\USB_DEVICE\Target\usbd_conf.h ..\Core\Inc\gpio.h \
   ..\Application\CleanBotApp.h ..\Modules\Motor\motor.h \
@@ -58,4 +59,5 @@ cleanbot/main.o: ..\Core\Src\main.c ..\Core\Inc\main.h \
   ..\Middlewares\Third_Party\FreeRTOS\Source\include\timers.h \
   ..\Config\hw_config.h ..\Config\system_config.h ..\Common\common_def.h \
   ..\Common\common_utils.h ..\Modules\Sensor\sensor_manager.h \
-  ..\Tasks\sensor_task.h ..\Tasks\usb_comm_task.h
+  ..\Tasks\sensor_task.h ..\Tasks\usb_comm_task.h \
+  ..\Modules\Homing\ir_homing.h

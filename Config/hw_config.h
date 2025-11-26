@@ -147,9 +147,9 @@ extern TIM_HandleTypeDef htim10;  /* 假设使用TIM10 */
    ============================================ */
 
 /* 左轮PID参数 */
-#define PID_WHEEL_LEFT_KP       100.0f
-#define PID_WHEEL_LEFT_KI       0.7f
-#define PID_WHEEL_LEFT_KD       0.02f
+#define PID_WHEEL_LEFT_KP       8.0f
+#define PID_WHEEL_LEFT_KI       0.1f
+#define PID_WHEEL_LEFT_KD       0.05f
 #define PID_WHEEL_LEFT_OUT_MAX  1000.0f
 #define PID_WHEEL_LEFT_OUT_MIN  -1000.0f
 
@@ -188,6 +188,8 @@ extern TIM_HandleTypeDef htim10;  /* 假设使用TIM10 */
 #define PUMP_MOTOR_SPEED_LOW    25      /* 低速 */
 #define PUMP_MOTOR_SPEED_MEDIUM 50      /* 中速 */
 #define PUMP_MOTOR_SPEED_HIGH   80      /* 高速 */
+#define PUMP_MOTOR_SPEED_TURBO  110     /* 超高速 */
+#define PUMP_MOTOR_SPEED_ULTRA  140     /* 最大水量 */
 
 /* 风机速度档位 (RPM) */
 #define FAN_MOTOR_SPEED_OFF     0       /* 关闭 */

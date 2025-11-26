@@ -13,6 +13,8 @@
 #include "photo_gate.h"
 #include "led.h"
 #include "CleanBotApp.h"
+#include "nec_decode.h"
+#include "ir_homing.h"
 #include "cmsis_os.h"
 
 /* 外部应用对象 */
@@ -177,16 +179,57 @@ static void SensorTask_HandleButton2Event(SensorEvent_t *event)
  */
 static void SensorTask_HandleIREvent(SensorEvent_t *event, IR_Sensor_t *sensor, int index)
 {
-    /* 从事件中提取边沿信息（这里需要实际实现NEC解码） */
-    /* 由于NEC解码需要精确的时间测量，建议使用定时器捕获 */
-    /* 这里简化处理，实际应该在中断中使用定时器捕获边沿时间 */
-    
-    /* 临时处理：闪烁LED表示收到红外信号 */
-    if (g_pCleanBotApp != NULL) {
-        SensorTask_StartLEDBlink(2);
+    if (event == NULL || sensor == NULL || g_pCleanBotApp == NULL) {
+        return;
     }
     
-    /* TODO: 实现完整的NEC解码逻辑 */
+    /* 从事件数据中提取边沿信息 */
+    /* event->data 格式：bit 0 = 电平(0=低,1=高), bit 1-31 = 时间间隔(微秒) */
+    bool level = (event->data & 0x01) != 0;
+    
+    /* 使用事件时间戳作为绝对时间（微秒）传递给解码器 */
+    /* 解码器内部会计算时间间隔 */
+    uint32_t absoluteTime = event->timestamp;
+    
+    /* 处理边沿信号到NEC解码器 */
+    bool decodeComplete = NEC_Decoder_ProcessEdge(&sensor->decoder, absoluteTime, level);
+    
+    /* 检查解码是否完成 */
+    if (decodeComplete || NEC_Decoder_IsDataReady(&sensor->decoder)) {
+        /* 获取解码数据 */
+        NEC_Data_t necData = NEC_Decoder_GetData(&sensor->decoder);
+        
+        if (necData.valid) {
+            /* 解码成功，处理NEC数据 */
+            /* 闪烁LED表示收到有效的NEC信号 */
+            SensorTask_StartLEDBlink(2);
+            
+            /* 更新红外回冲定位模块的接收器数据 */
+            IRPosition_t position;
+            switch (index) {
+                case 0:  /* 左侧红外传感器 */
+                    position = IR_POSITION_LEFT;
+                    break;
+                case 1:  /* 右侧红外传感器 */
+                    position = IR_POSITION_RIGHT;
+                    break;
+                case 2:  /* 左前红外传感器 */
+                    position = IR_POSITION_FRONT_LEFT;
+                    break;
+                case 3:  /* 右前红外传感器 */
+                    position = IR_POSITION_FRONT_RIGHT;
+                    break;
+                default:
+                    position = IR_POSITION_LEFT;  /* 默认值，不应该到达这里 */
+                    break;
+            }
+            IRHoming_UpdateReceiver(&g_pCleanBotApp->irHoming, position, &necData);
+        } else {
+            /* 解码失败，可能是时序错误或数据无效 */
+            /* 可以闪烁一次LED表示错误 */
+            SensorTask_StartLEDBlink(1);
+        }
+    }
 }
 
 /**
@@ -207,6 +250,60 @@ static void SensorTask_HandlePhotoGateEvent(SensorEvent_t *event)
         if (event->data == 1) {
             SensorTask_StartLEDBlink(2);
         }
+    }
+
+    IRHoming_UpdateBumperState(&g_pCleanBotApp->irHoming,
+                               g_pCleanBotApp->photoGateLeft.state == PHOTO_GATE_BLOCKED,
+                               g_pCleanBotApp->photoGateRight.state == PHOTO_GATE_BLOCKED);
+}
+
+/**
+ * @brief  处理下视传感器事件
+ */
+static void SensorTask_HandleUnderSensorEvent(SensorEvent_t *event)
+{
+    if (g_pCleanBotApp == NULL) return;
+    
+    bool isSuspended = (event->data == 1);  /* 1=悬空（高电平），0=地面（低电平） */
+    
+    switch (event->type) {
+        case SENSOR_EVENT_UNDER_LEFT:
+            g_pCleanBotApp->underLeftSuspended = isSuspended;
+            /* TODO: 根据左前下视传感器状态执行相应操作 */
+            /* 例如：如果悬空，可能需要停止或减速 */
+            if (isSuspended) {
+                /* 检测到悬空，可以闪烁LED提示 */
+                SensorTask_StartLEDBlink(1);
+            }
+            break;
+            
+        case SENSOR_EVENT_UNDER_RIGHT:
+            g_pCleanBotApp->underRightSuspended = isSuspended;
+            /* TODO: 根据右前下视传感器状态执行相应操作 */
+            if (isSuspended) {
+                SensorTask_StartLEDBlink(1);
+            }
+            break;
+            
+        case SENSOR_EVENT_UNDER_CENTER:
+            g_pCleanBotApp->underCenterSuspended = isSuspended;
+            /* TODO: 根据中间下视传感器状态执行相应操作 */
+            if (isSuspended) {
+                SensorTask_StartLEDBlink(1);
+            }
+            break;
+            
+        default:
+            break;
+    }
+    
+    /* 如果所有下视传感器都检测到悬空，可能需要紧急停止 */
+    if (g_pCleanBotApp->underLeftSuspended && 
+        g_pCleanBotApp->underRightSuspended && 
+        g_pCleanBotApp->underCenterSuspended) {
+        /* 所有下视传感器都悬空，可能处于危险状态 */
+        /* TODO: 执行紧急停止或报警 */
+        SensorTask_StartLEDBlink(3);  /* 快速闪烁3次表示危险 */
     }
 }
 
@@ -256,6 +353,11 @@ void SensorTask_Run(void *argument)
         /* 检查按钮超时 */
         SensorTask_CheckButtonTimeout();
         
+        /* 处理红外回冲定位（如果使能） */
+        if (g_pCleanBotApp != NULL) {
+            IRHoming_Process(&g_pCleanBotApp->irHoming);
+        }
+        
         /* 从队列获取事件 */
         if (SensorManager_GetEvent(sensorManager, &event, 10)) {
             if (g_pCleanBotApp != NULL) {
@@ -283,6 +385,11 @@ void SensorTask_Run(void *argument)
                     case SENSOR_EVENT_BUTTON2_PRESS:
                     case SENSOR_EVENT_BUTTON2_RELEASE:
                         SensorTask_HandleButton2Event(&event);
+                        break;
+                    case SENSOR_EVENT_UNDER_LEFT:
+                    case SENSOR_EVENT_UNDER_RIGHT:
+                    case SENSOR_EVENT_UNDER_CENTER:
+                        SensorTask_HandleUnderSensorEvent(&event);
                         break;
                     default:
                         break;

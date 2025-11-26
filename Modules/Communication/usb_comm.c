@@ -10,13 +10,27 @@
 #include "usb_comm.h"
 #include "usbd_cdc_if.h"
 #include "usb_device.h"
+#include "cmsis_os.h"
 #include <stddef.h>  /* 定义NULL */
 
+static void USB_Comm_TryStartTx(USB_Comm_t *comm);
+static inline uint32_t USB_Comm_EnterCritical(void)
+{
+    uint32_t primask = __get_PRIMASK();
+    __disable_irq();
+    return primask;
+}
+
+static inline void USB_Comm_ExitCritical(uint32_t primask)
+{
+    __set_PRIMASK(primask);
+}
+
 /**
-  * @brief  初始化USB通信
-  * @param  comm: USB通信对象指针
-  * @retval None
-  */
+ * @brief  初始化USB通信
+ * @param  comm: USB通信对象指针
+ * @retval None
+ */
 void USB_Comm_Init(USB_Comm_t *comm)
 {
     if (comm == NULL) return;
@@ -25,6 +39,7 @@ void USB_Comm_Init(USB_Comm_t *comm)
     RingBuffer_Init(&comm->txBuffer, comm->txData, USB_COMM_TX_BUFFER_SIZE);
     comm->connected = false;
     comm->enabled = true;
+    comm->txBusy = false;
 }
 
 /**
@@ -63,15 +78,13 @@ uint32_t USB_Comm_Send(USB_Comm_t *comm, const uint8_t *data, uint32_t len)
     if (!comm->connected) return 0;
     
     /* 将数据放入发送缓冲区 */
+    uint32_t primask = USB_Comm_EnterCritical();
     uint32_t written = RingBuffer_PutData(&comm->txBuffer, data, len);
+    USB_Comm_ExitCritical(primask);
     
     /* 尝试通过USB发送数据 */
-    if (written > 0 && comm->connected) {
-        uint8_t sendBuf[64];
-        uint32_t sendLen = RingBuffer_GetData(&comm->txBuffer, sendBuf, sizeof(sendBuf));
-        if (sendLen > 0) {
-            CDC_Transmit_FS(sendBuf, sendLen);
-        }
+    if (written > 0) {
+        USB_Comm_TryStartTx(comm);
     }
     
     return written;
@@ -134,6 +147,12 @@ void USB_Comm_SetConnected(USB_Comm_t *comm, bool connected)
 {
     if (comm == NULL) return;
     comm->connected = connected;
+    if (!connected) {
+        uint32_t primask = USB_Comm_EnterCritical();
+        comm->txBusy = false;
+        RingBuffer_Reset(&comm->txBuffer);
+        USB_Comm_ExitCritical(primask);
+    }
 }
 
 /**
@@ -158,7 +177,10 @@ void USB_Comm_UpdateConnectionState(USB_Comm_t *comm)
         
         /* 如果断开连接，清空发送缓冲区 */
         if (!isConnected) {
+            uint32_t primask = USB_Comm_EnterCritical();
             RingBuffer_Reset(&comm->txBuffer);
+            comm->txBusy = false;
+            USB_Comm_ExitCritical(primask);
         }
     }
 }
@@ -187,13 +209,48 @@ void USB_Comm_TxCpltCallback(USB_Comm_t *comm)
 {
     if (comm == NULL || !comm->enabled) return;
     
-    /* 继续发送缓冲区中的数据 */
-    if (!RingBuffer_IsEmpty(&comm->txBuffer) && comm->connected) {
-        uint8_t sendBuf[64];
-        uint32_t sendLen = RingBuffer_GetData(&comm->txBuffer, sendBuf, sizeof(sendBuf));
-        if (sendLen > 0) {
-            CDC_Transmit_FS(sendBuf, sendLen);
+    uint32_t primask = USB_Comm_EnterCritical();
+    comm->txBusy = false;
+    USB_Comm_ExitCritical(primask);
+    USB_Comm_TryStartTx(comm);
+}
+
+/**
+ * @brief  若USB端点空闲则启动一次发送
+ */
+static void USB_Comm_TryStartTx(USB_Comm_t *comm)
+{
+    if (comm == NULL || !comm->enabled || !comm->connected) return;
+    
+    extern USBD_HandleTypeDef hUsbDeviceFS;
+    USBD_CDC_HandleTypeDef *hcdc = (USBD_CDC_HandleTypeDef*)hUsbDeviceFS.pClassData;
+    if (hcdc == NULL || hcdc->TxState != 0) {
+        return;
+    }
+    
+    uint32_t primask = USB_Comm_EnterCritical();
+    if (comm->txBusy) {
+        USB_Comm_ExitCritical(primask);
+        return;
+    }
+    uint32_t sendLen = RingBuffer_GetData(&comm->txBuffer,
+                                          comm->txPacket,
+                                          USB_COMM_TX_PACKET_SIZE);
+    if (sendLen == 0) {
+        USB_Comm_ExitCritical(primask);
+        return;
+    }
+    comm->txBusy = true;
+    USB_Comm_ExitCritical(primask);
+    
+    if (CDC_Transmit_FS(comm->txPacket, (uint16_t)sendLen) != USBD_OK) {
+        primask = USB_Comm_EnterCritical();
+        comm->txBusy = false;
+        /* 发送失败时将数据写回缓冲区前部，避免丢包 */
+        for (int32_t i = (int32_t)sendLen - 1; i >= 0; --i) {
+            RingBuffer_PutFront(&comm->txBuffer, comm->txPacket[i]);
         }
+        USB_Comm_ExitCritical(primask);
     }
 }
 

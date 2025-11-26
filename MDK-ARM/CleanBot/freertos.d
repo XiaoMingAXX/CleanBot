@@ -24,6 +24,7 @@ cleanbot/freertos.o: ..\Core\Src\freertos.c \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dma.h \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dma_ex.h \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_cortex.h \
+  ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_crc.h \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash.h \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash_ex.h \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash_ramfunc.h \
@@ -56,4 +57,5 @@ cleanbot/freertos.o: ..\Core\Src\freertos.c \
   ..\Middlewares\Third_Party\FreeRTOS\Source\include\timers.h \
   ..\Config\hw_config.h ..\Config\system_config.h ..\Common\common_def.h \
   ..\Common\common_utils.h ..\Modules\Sensor\sensor_manager.h \
-  ..\Tasks\sensor_task.h ..\Tasks\usb_comm_task.h ..\Tasks\imu_task.h
+  ..\Tasks\sensor_task.h ..\Tasks\usb_comm_task.h \
+  ..\Modules\Homing\ir_homing.h ..\Tasks\imu_task.h

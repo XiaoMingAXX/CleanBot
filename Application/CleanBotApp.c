@@ -132,6 +132,14 @@ void CleanBotApp_Init(CleanBotApp_t *app)
     USB_Comm_Init(&app->usbComm);
     USB_Comm_Enable(&app->usbComm);
     
+    /* 初始化红外回冲定位模块 */
+    IRHoming_Init(&app->irHoming);
+    
+    /* 初始化下视传感器状态 */
+    app->underLeftSuspended = false;
+    app->underRightSuspended = false;
+    app->underCenterSuspended = false;
+    
     /* 初始化状态 */
     app->state = CLEANBOT_STATE_IDLE;
     app->enabled = false;

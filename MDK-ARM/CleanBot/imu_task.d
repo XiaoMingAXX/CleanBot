@@ -27,6 +27,7 @@ cleanbot/imu_task.o: ..\Tasks\imu_task.c ..\Tasks\imu_task.h \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dma.h \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dma_ex.h \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_cortex.h \
+  ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_crc.h \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash.h \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash_ex.h \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash_ramfunc.h \
@@ -38,23 +39,4 @@ cleanbot/imu_task.o: ..\Tasks\imu_task.c ..\Tasks\imu_task.h \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pcd.h \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_usb.h \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pcd_ex.h \
-  ..\Utils\ring_buffer.h ..\Modules\Communication\usb_comm.h \
-  ..\USB_DEVICE\App\usb_device.h \
-  ..\Middlewares\ST\STM32_USB_Device_Library\Core\Inc\usbd_def.h \
-  ..\USB_DEVICE\Target\usbd_conf.h ..\USB_DEVICE\App\usbd_cdc_if.h \
-  ..\Middlewares\ST\STM32_USB_Device_Library\Class\CDC\Inc\usbd_cdc.h \
-  ..\Middlewares\ST\STM32_USB_Device_Library\Core\Inc\usbd_ioreq.h \
-  ..\Middlewares\ST\STM32_USB_Device_Library\Core\Inc\usbd_core.h \
-  ..\Middlewares\ST\STM32_USB_Device_Library\Core\Inc\usbd_ctlreq.h \
-  ..\Application\CleanBotApp.h ..\Modules\Motor\motor.h \
-  ..\Modules\Encoder\encoder.h ..\Modules\PID\pid_controller.h \
-  ..\Modules\Sensor\ir_sensor.h ..\Utils\nec_decode.h \
-  ..\Modules\Sensor\photo_gate.h ..\Modules\Indicator\led.h \
-  ..\Modules\Indicator\buzzer.h ..\Tasks\motor_ctrl_task.h \
-  ..\Config\cleanbot_config.h \
-  ..\Middlewares\Third_Party\FreeRTOS\Source\include\queue.h \
-  ..\Middlewares\Third_Party\FreeRTOS\Source\include\semphr.h \
-  ..\Middlewares\Third_Party\FreeRTOS\Source\include\timers.h \
-  ..\Config\hw_config.h ..\Config\system_config.h ..\Common\common_def.h \
-  ..\Common\common_utils.h ..\Modules\Sensor\sensor_manager.h \
-  ..\Tasks\sensor_task.h ..\Tasks\usb_comm_task.h
+  ..\Utils\ring_buffer.h
