@@ -52,7 +52,7 @@ I (..\USB_DEVICE\Target\usbd_conf.h)(0x691C31D3)
 I (..\Core\Inc\gpio.h)(0x691C31D3)
 I (..\Application\CleanBotApp.h)(0x69267A69)
 I (..\Modules\Motor\motor.h)(0x691C31D3)
-I (..\Modules\Encoder\encoder.h)(0x69266E79)
+I (..\Modules\Encoder\encoder.h)(0x692AD086)
 I (..\Modules\PID\pid_controller.h)(0x691C31D3)
 I (..\Modules\Sensor\ir_sensor.h)(0x691C31D3)
 I (..\Utils\nec_decode.h)(0x691C31D3)
@@ -71,7 +71,7 @@ I (..\Config\cleanbot_config.h)(0x691C31D2)
 I (..\Middlewares\Third_Party\FreeRTOS\Source\include\queue.h)(0x691C341A)
 I (..\Middlewares\Third_Party\FreeRTOS\Source\include\semphr.h)(0x691C341A)
 I (..\Middlewares\Third_Party\FreeRTOS\Source\include\timers.h)(0x691C341A)
-I (..\Config\hw_config.h)(0x6926EE3D)
+I (..\Config\hw_config.h)(0x692D40B6)
 I (..\Config\system_config.h)(0x6926D839)
 I (..\Common\common_def.h)(0x691C31D2)
 I (..\Common\common_utils.h)(0x691C31D2)
@@ -124,12 +124,12 @@ I (..\Middlewares\Third_Party\FreeRTOS\Source\include\list.h)(0x691C341A)
 I (..\Middlewares\Third_Party\FreeRTOS\Source\include\queue.h)(0x691C341A)
 I (..\Middlewares\Third_Party\FreeRTOS\Source\include\semphr.h)(0x691C341A)
 I (..\Middlewares\Third_Party\FreeRTOS\Source\include\timers.h)(0x691C341A)
-I (..\Config\hw_config.h)(0x6926EE3D)
+I (..\Config\hw_config.h)(0x692D40B6)
 I (..\Config\system_config.h)(0x6926D839)
 I (..\Common\common_def.h)(0x691C31D2)
 I (..\Common\common_utils.h)(0x691C31D2)
 I (..\Modules\Motor\motor.h)(0x691C31D3)
-I (..\Modules\Encoder\encoder.h)(0x69266E79)
+I (..\Modules\Encoder\encoder.h)(0x692AD086)
 I (..\Modules\PID\pid_controller.h)(0x691C31D3)
 I (..\Modules\Sensor\ir_sensor.h)(0x691C31D3)
 I (..\Utils\nec_decode.h)(0x691C31D3)
@@ -194,7 +194,7 @@ I (..\Middlewares\Third_Party\FreeRTOS\Source\CMSIS_RTOS_V2\cmsis_os.h)(0x691C34
 I (..\Middlewares\Third_Party\FreeRTOS\Source\CMSIS_RTOS_V2\cmsis_os2.h)(0x691C341A)
 I (..\Application\CleanBotApp.h)(0x69267A69)
 I (..\Modules\Motor\motor.h)(0x691C31D3)
-I (..\Modules\Encoder\encoder.h)(0x69266E79)
+I (..\Modules\Encoder\encoder.h)(0x692AD086)
 I (..\Modules\PID\pid_controller.h)(0x691C31D3)
 I (..\Modules\Sensor\ir_sensor.h)(0x691C31D3)
 I (..\Utils\nec_decode.h)(0x691C31D3)
@@ -216,7 +216,7 @@ I (..\Config\cleanbot_config.h)(0x691C31D2)
 I (..\Middlewares\Third_Party\FreeRTOS\Source\include\queue.h)(0x691C341A)
 I (..\Middlewares\Third_Party\FreeRTOS\Source\include\semphr.h)(0x691C341A)
 I (..\Middlewares\Third_Party\FreeRTOS\Source\include\timers.h)(0x691C341A)
-I (..\Config\hw_config.h)(0x6926EE3D)
+I (..\Config\hw_config.h)(0x692D40B6)
 I (..\Config\system_config.h)(0x6926D839)
 I (..\Common\common_def.h)(0x691C31D2)
 I (..\Common\common_utils.h)(0x691C31D2)
@@ -553,7 +553,7 @@ I (..\Middlewares\ST\STM32_USB_Device_Library\Core\Inc\usbd_core.h)(0x691C3441)
 I (..\Middlewares\ST\STM32_USB_Device_Library\Core\Inc\usbd_ctlreq.h)(0x691C3441)
 I (..\Application\CleanBotApp.h)(0x69267A69)
 I (..\Modules\Motor\motor.h)(0x691C31D3)
-I (..\Modules\Encoder\encoder.h)(0x69266E79)
+I (..\Modules\Encoder\encoder.h)(0x692AD086)
 I (..\Modules\PID\pid_controller.h)(0x691C31D3)
 I (..\Modules\Sensor\ir_sensor.h)(0x691C31D3)
 I (..\Utils\nec_decode.h)(0x691C31D3)
@@ -577,7 +577,7 @@ I (..\Middlewares\Third_Party\FreeRTOS\Source\include\list.h)(0x691C341A)
 I (..\Middlewares\Third_Party\FreeRTOS\Source\include\queue.h)(0x691C341A)
 I (..\Middlewares\Third_Party\FreeRTOS\Source\include\semphr.h)(0x691C341A)
 I (..\Middlewares\Third_Party\FreeRTOS\Source\include\timers.h)(0x691C341A)
-I (..\Config\hw_config.h)(0x6926EE3D)
+I (..\Config\hw_config.h)(0x692D40B6)
 I (..\Config\system_config.h)(0x6926D839)
 I (..\Common\common_def.h)(0x691C31D2)
 I (..\Common\common_utils.h)(0x691C31D2)
@@ -1548,7 +1548,7 @@ I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pcd.h)(0x691C3441)
 I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_usb.h)(0x691C3441)
 I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pcd_ex.h)(0x691C3441)
 I (..\Modules\Motor\motor.h)(0x691C31D3)
-I (..\Modules\Encoder\encoder.h)(0x69266E79)
+I (..\Modules\Encoder\encoder.h)(0x692AD086)
 I (..\Modules\PID\pid_controller.h)(0x691C31D3)
 I (..\Modules\Sensor\ir_sensor.h)(0x691C31D3)
 I (..\Utils\nec_decode.h)(0x691C31D3)
@@ -1579,7 +1579,7 @@ I (..\Middlewares\Third_Party\FreeRTOS\Source\include\list.h)(0x691C341A)
 I (..\Middlewares\Third_Party\FreeRTOS\Source\include\queue.h)(0x691C341A)
 I (..\Middlewares\Third_Party\FreeRTOS\Source\include\semphr.h)(0x691C341A)
 I (..\Middlewares\Third_Party\FreeRTOS\Source\include\timers.h)(0x691C341A)
-I (..\Config\hw_config.h)(0x6926EE3D)
+I (..\Config\hw_config.h)(0x692D40B6)
 I (..\Config\system_config.h)(0x6926D839)
 I (..\Common\common_def.h)(0x691C31D2)
 I (..\Common\common_utils.h)(0x691C31D2)
@@ -1621,7 +1621,7 @@ I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pcd.h)(0x691C3441)
 I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_usb.h)(0x691C3441)
 I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pcd_ex.h)(0x691C3441)
 I (..\Modules\Motor\motor.h)(0x691C31D3)
-I (..\Modules\Encoder\encoder.h)(0x69266E79)
+I (..\Modules\Encoder\encoder.h)(0x692AD086)
 I (..\Modules\PID\pid_controller.h)(0x691C31D3)
 I (..\Modules\Sensor\ir_sensor.h)(0x691C31D3)
 I (..\Utils\nec_decode.h)(0x691C31D3)
@@ -1652,7 +1652,7 @@ I (..\Middlewares\Third_Party\FreeRTOS\Source\include\list.h)(0x691C341A)
 I (..\Middlewares\Third_Party\FreeRTOS\Source\include\queue.h)(0x691C341A)
 I (..\Middlewares\Third_Party\FreeRTOS\Source\include\semphr.h)(0x691C341A)
 I (..\Middlewares\Third_Party\FreeRTOS\Source\include\timers.h)(0x691C341A)
-I (..\Config\hw_config.h)(0x6926EE3D)
+I (..\Config\hw_config.h)(0x692D40B6)
 I (..\Config\system_config.h)(0x6926D839)
 I (..\Common\common_def.h)(0x691C31D2)
 I (..\Common\common_utils.h)(0x691C31D2)
@@ -1665,9 +1665,9 @@ I (..\Core\Inc\gpio.h)(0x691C31D3)
 I (..\Middlewares\Third_Party\FreeRTOS\Source\CMSIS_RTOS_V2\cmsis_os.h)(0x691C341A)
 I (..\Middlewares\Third_Party\FreeRTOS\Source\CMSIS_RTOS_V2\cmsis_os2.h)(0x691C341A)
 F (..\Config\cleanbot_config.h)(0x691C31D2)()
-F (..\Config\hw_config.h)(0x6926EE3D)()
+F (..\Config\hw_config.h)(0x692D40B6)()
 F (..\Config\system_config.h)(0x6926D839)()
-F (..\Modules\Communication\usb_comm.c)(0x6926F32F)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-gdwarf-4 -O0 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ../Core/Inc -I ../USB_DEVICE/App -I ../USB_DEVICE/Target -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I ../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ../Middlewares/Third_Party/FreeRTOS/Source/include -I ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2 -I ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F -I ../Application -I ../Config -I ../Modules/Communication -I ../Modules/Encoder -I ../Modules/Indicator -I ../Modules/Motor -I ../Modules/PID -I ../Modules/Sensor -I ../Tasks -I ../Utils -I ../Common -I ../Modules/Homing-I./RTE/_CleanBot-IC:/Users/ZhumingLi/AppData/Local/Arm/Packs/ARM/CMSIS/6.2.0/CMSIS/Core/Include-D__UVISION_VERSION="543" -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o cleanbot/usb_comm.o -MMD)
+F (..\Modules\Communication\usb_comm.c)(0x6926F504)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-gdwarf-4 -O0 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ../Core/Inc -I ../USB_DEVICE/App -I ../USB_DEVICE/Target -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I ../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ../Middlewares/Third_Party/FreeRTOS/Source/include -I ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2 -I ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F -I ../Application -I ../Config -I ../Modules/Communication -I ../Modules/Encoder -I ../Modules/Indicator -I ../Modules/Motor -I ../Modules/PID -I ../Modules/Sensor -I ../Tasks -I ../Utils -I ../Common -I ../Modules/Homing-I./RTE/_CleanBot-IC:/Users/ZhumingLi/AppData/Local/Arm/Packs/ARM/CMSIS/6.2.0/CMSIS/Core/Include-D__UVISION_VERSION="543" -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o cleanbot/usb_comm.o -MMD)
 I (..\Modules\Communication\usb_comm.h)(0x6926F0C1)
 I (..\USB_DEVICE\App\usb_device.h)(0x691C31D3)
 I (..\Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f4xx.h)(0x691C3441)
@@ -1719,7 +1719,7 @@ I (..\Middlewares\Third_Party\FreeRTOS\Source\include\task.h)(0x691C341A)
 I (..\Middlewares\Third_Party\FreeRTOS\Source\include\list.h)(0x691C341A)
 I (..\Middlewares\Third_Party\FreeRTOS\Source\CMSIS_RTOS_V2\cmsis_os2.h)(0x691C341A)
 F (..\Modules\Encoder\encoder.c)(0x69266E6A)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-gdwarf-4 -O0 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ../Core/Inc -I ../USB_DEVICE/App -I ../USB_DEVICE/Target -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I ../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ../Middlewares/Third_Party/FreeRTOS/Source/include -I ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2 -I ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F -I ../Application -I ../Config -I ../Modules/Communication -I ../Modules/Encoder -I ../Modules/Indicator -I ../Modules/Motor -I ../Modules/PID -I ../Modules/Sensor -I ../Tasks -I ../Utils -I ../Common -I ../Modules/Homing-I./RTE/_CleanBot-IC:/Users/ZhumingLi/AppData/Local/Arm/Packs/ARM/CMSIS/6.2.0/CMSIS/Core/Include-D__UVISION_VERSION="543" -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o cleanbot/encoder.o -MMD)
-I (..\Modules\Encoder\encoder.h)(0x69266E79)
+I (..\Modules\Encoder\encoder.h)(0x692AD086)
 I (..\Core\Inc\main.h)(0x691C31D3)
 I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal.h)(0x691C3441)
 I (..\Core\Inc\stm32f4xx_hal_conf.h)(0x69231BE8)
@@ -1995,12 +1995,12 @@ I (..\Middlewares\Third_Party\FreeRTOS\Source\include\list.h)(0x691C341A)
 I (..\Middlewares\Third_Party\FreeRTOS\Source\include\queue.h)(0x691C341A)
 I (..\Middlewares\Third_Party\FreeRTOS\Source\include\semphr.h)(0x691C341A)
 I (..\Middlewares\Third_Party\FreeRTOS\Source\include\timers.h)(0x691C341A)
-I (..\Config\hw_config.h)(0x6926EE3D)
+I (..\Config\hw_config.h)(0x692D40B6)
 I (..\Config\system_config.h)(0x6926D839)
 I (..\Common\common_def.h)(0x691C31D2)
 I (..\Common\common_utils.h)(0x691C31D2)
 I (..\Modules\Motor\motor.h)(0x691C31D3)
-I (..\Modules\Encoder\encoder.h)(0x69266E79)
+I (..\Modules\Encoder\encoder.h)(0x692AD086)
 I (..\Modules\PID\pid_controller.h)(0x691C31D3)
 I (..\Modules\Sensor\ir_sensor.h)(0x691C31D3)
 I (..\Utils\nec_decode.h)(0x691C31D3)
@@ -2071,12 +2071,12 @@ I (..\Middlewares\Third_Party\FreeRTOS\Source\include\list.h)(0x691C341A)
 I (..\Middlewares\Third_Party\FreeRTOS\Source\include\queue.h)(0x691C341A)
 I (..\Middlewares\Third_Party\FreeRTOS\Source\include\semphr.h)(0x691C341A)
 I (..\Middlewares\Third_Party\FreeRTOS\Source\include\timers.h)(0x691C341A)
-I (..\Config\hw_config.h)(0x6926EE3D)
+I (..\Config\hw_config.h)(0x692D40B6)
 I (..\Config\system_config.h)(0x6926D839)
 I (..\Common\common_def.h)(0x691C31D2)
 I (..\Common\common_utils.h)(0x691C31D2)
 I (..\Modules\Motor\motor.h)(0x691C31D3)
-I (..\Modules\Encoder\encoder.h)(0x69266E79)
+I (..\Modules\Encoder\encoder.h)(0x692AD086)
 I (..\Modules\PID\pid_controller.h)(0x691C31D3)
 I (..\Modules\Sensor\photo_gate.h)(0x691C31D3)
 I (..\Modules\Indicator\led.h)(0x691C31D3)
@@ -2095,7 +2095,7 @@ I (..\Application\CleanBotApp.h)(0x69267A69)
 I (..\Modules\Sensor\sensor_manager.h)(0x69267A69)
 I (..\Tasks\sensor_task.h)(0x691C31D3)
 I (..\Tasks\usb_comm_task.h)(0x691C31D3)
-F (..\Tasks\motor_ctrl_task.c)(0x6926D85B)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-gdwarf-4 -O0 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ../Core/Inc -I ../USB_DEVICE/App -I ../USB_DEVICE/Target -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I ../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ../Middlewares/Third_Party/FreeRTOS/Source/include -I ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2 -I ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F -I ../Application -I ../Config -I ../Modules/Communication -I ../Modules/Encoder -I ../Modules/Indicator -I ../Modules/Motor -I ../Modules/PID -I ../Modules/Sensor -I ../Tasks -I ../Utils -I ../Common -I ../Modules/Homing-I./RTE/_CleanBot-IC:/Users/ZhumingLi/AppData/Local/Arm/Packs/ARM/CMSIS/6.2.0/CMSIS/Core/Include-D__UVISION_VERSION="543" -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o cleanbot/motor_ctrl_task.o -MMD)
+F (..\Tasks\motor_ctrl_task.c)(0x692D3E0A)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-gdwarf-4 -O0 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ../Core/Inc -I ../USB_DEVICE/App -I ../USB_DEVICE/Target -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I ../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ../Middlewares/Third_Party/FreeRTOS/Source/include -I ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2 -I ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F -I ../Application -I ../Config -I ../Modules/Communication -I ../Modules/Encoder -I ../Modules/Indicator -I ../Modules/Motor -I ../Modules/PID -I ../Modules/Sensor -I ../Tasks -I ../Utils -I ../Common -I ../Modules/Homing-I./RTE/_CleanBot-IC:/Users/ZhumingLi/AppData/Local/Arm/Packs/ARM/CMSIS/6.2.0/CMSIS/Core/Include-D__UVISION_VERSION="543" -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o cleanbot/motor_ctrl_task.o -MMD)
 I (..\Tasks\motor_ctrl_task.h)(0x6926D846)
 I (..\Config\cleanbot_config.h)(0x691C31D2)
 I (..\Core\Inc\main.h)(0x691C31D3)
@@ -2139,12 +2139,12 @@ I (..\Middlewares\Third_Party\FreeRTOS\Source\include\list.h)(0x691C341A)
 I (..\Middlewares\Third_Party\FreeRTOS\Source\include\queue.h)(0x691C341A)
 I (..\Middlewares\Third_Party\FreeRTOS\Source\include\semphr.h)(0x691C341A)
 I (..\Middlewares\Third_Party\FreeRTOS\Source\include\timers.h)(0x691C341A)
-I (..\Config\hw_config.h)(0x6926EE3D)
+I (..\Config\hw_config.h)(0x692D40B6)
 I (..\Config\system_config.h)(0x6926D839)
 I (..\Common\common_def.h)(0x691C31D2)
 I (..\Common\common_utils.h)(0x691C31D2)
 I (..\Modules\Motor\motor.h)(0x691C31D3)
-I (..\Modules\Encoder\encoder.h)(0x69266E79)
+I (..\Modules\Encoder\encoder.h)(0x692AD086)
 I (..\Modules\PID\pid_controller.h)(0x691C31D3)
 I (..\Modules\Sensor\ir_sensor.h)(0x691C31D3)
 I (..\Utils\nec_decode.h)(0x691C31D3)
@@ -2212,12 +2212,12 @@ I (..\Middlewares\Third_Party\FreeRTOS\Source\include\list.h)(0x691C341A)
 I (..\Middlewares\Third_Party\FreeRTOS\Source\include\queue.h)(0x691C341A)
 I (..\Middlewares\Third_Party\FreeRTOS\Source\include\semphr.h)(0x691C341A)
 I (..\Middlewares\Third_Party\FreeRTOS\Source\include\timers.h)(0x691C341A)
-I (..\Config\hw_config.h)(0x6926EE3D)
+I (..\Config\hw_config.h)(0x692D40B6)
 I (..\Config\system_config.h)(0x6926D839)
 I (..\Common\common_def.h)(0x691C31D2)
 I (..\Common\common_utils.h)(0x691C31D2)
 I (..\Modules\Motor\motor.h)(0x691C31D3)
-I (..\Modules\Encoder\encoder.h)(0x69266E79)
+I (..\Modules\Encoder\encoder.h)(0x692AD086)
 I (..\Modules\PID\pid_controller.h)(0x691C31D3)
 I (..\Modules\Sensor\ir_sensor.h)(0x691C31D3)
 I (..\Utils\nec_decode.h)(0x691C31D3)
@@ -2285,12 +2285,12 @@ I (..\Middlewares\Third_Party\FreeRTOS\Source\include\list.h)(0x691C341A)
 I (..\Middlewares\Third_Party\FreeRTOS\Source\include\queue.h)(0x691C341A)
 I (..\Middlewares\Third_Party\FreeRTOS\Source\include\semphr.h)(0x691C341A)
 I (..\Middlewares\Third_Party\FreeRTOS\Source\include\timers.h)(0x691C341A)
-I (..\Config\hw_config.h)(0x6926EE3D)
+I (..\Config\hw_config.h)(0x692D40B6)
 I (..\Config\system_config.h)(0x6926D839)
 I (..\Common\common_def.h)(0x691C31D2)
 I (..\Common\common_utils.h)(0x691C31D2)
 I (..\Modules\Motor\motor.h)(0x691C31D3)
-I (..\Modules\Encoder\encoder.h)(0x69266E79)
+I (..\Modules\Encoder\encoder.h)(0x692AD086)
 I (..\Modules\PID\pid_controller.h)(0x691C31D3)
 I (..\Modules\Sensor\ir_sensor.h)(0x691C31D3)
 I (..\Utils\nec_decode.h)(0x691C31D3)

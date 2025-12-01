@@ -264,7 +264,7 @@ static void MotorCtrlTask_FanMotorControl(void)
     
     /* 设置电机速度 */
     Motor_SetDirection(&g_pCleanBotApp->fanMotor, MOTOR_STATE_FORWARD);
-    Motor_SetSpeed(&g_pCleanBotApp->fanMotor, (int16_t)output);
+    Motor_SetSpeed(&g_pCleanBotApp->fanMotor, (int16_t)targetRPM);
 }
 float leftCurrentRPM,rightCurrentRPM=0.0;
 float leftTarget,rightTarget=0.0;

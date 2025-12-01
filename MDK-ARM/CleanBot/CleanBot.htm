@@ -3,7 +3,7 @@
 <title>Static Call Graph - [CleanBot\CleanBot.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image CleanBot\CleanBot.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 6240002: Last Updated: Wed Nov 26 20:37:45 2025
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 6240002: Last Updated: Mon Dec  1 15:16:07 2025
 <BR><P>
 <H3>Maximum Stack Usage =        712 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -4676,7 +4676,7 @@ Local Symbols
 <BR>[Called By]<UL><LI><a href="#[60]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MotorCtrlTask_Run
 </UL>
 
-<P><STRONG><a name="[18b]"></a>MotorCtrlTask_BrushMotorControl</STRONG> (Thumb, 222 bytes, Stack size 32 bytes, motor_ctrl_task.o(.text.MotorCtrlTask_BrushMotorControl))
+<P><STRONG><a name="[18b]"></a>MotorCtrlTask_BrushMotorControl</STRONG> (Thumb, 230 bytes, Stack size 32 bytes, motor_ctrl_task.o(.text.MotorCtrlTask_BrushMotorControl))
 <BR><BR>[Stack]<UL><LI>Max Depth = 48<LI>Call Chain = MotorCtrlTask_BrushMotorControl &rArr; Motor_SetDirection
 </UL>
 <BR>[Calls]<UL><LI><a href="#[18d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Motor_SetDirection
@@ -4685,7 +4685,7 @@ Local Symbols
 <BR>[Called By]<UL><LI><a href="#[60]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MotorCtrlTask_Run
 </UL>
 
-<P><STRONG><a name="[193]"></a>MotorCtrlTask_PumpMotorControl</STRONG> (Thumb, 144 bytes, Stack size 24 bytes, motor_ctrl_task.o(.text.MotorCtrlTask_PumpMotorControl))
+<P><STRONG><a name="[193]"></a>MotorCtrlTask_PumpMotorControl</STRONG> (Thumb, 154 bytes, Stack size 24 bytes, motor_ctrl_task.o(.text.MotorCtrlTask_PumpMotorControl))
 <BR><BR>[Stack]<UL><LI>Max Depth = 40<LI>Call Chain = MotorCtrlTask_PumpMotorControl &rArr; Motor_SetDirection
 </UL>
 <BR>[Calls]<UL><LI><a href="#[18d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Motor_SetDirection
@@ -4694,7 +4694,7 @@ Local Symbols
 <BR>[Called By]<UL><LI><a href="#[60]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MotorCtrlTask_Run
 </UL>
 
-<P><STRONG><a name="[18e]"></a>MotorCtrlTask_FanMotorControl</STRONG> (Thumb, 248 bytes, Stack size 32 bytes, motor_ctrl_task.o(.text.MotorCtrlTask_FanMotorControl))
+<P><STRONG><a name="[18e]"></a>MotorCtrlTask_FanMotorControl</STRONG> (Thumb, 244 bytes, Stack size 32 bytes, motor_ctrl_task.o(.text.MotorCtrlTask_FanMotorControl))
 <BR><BR>[Stack]<UL><LI>Max Depth = 120<LI>Call Chain = MotorCtrlTask_FanMotorControl &rArr; PID_Compute &rArr; osKernelGetTickCount &rArr; xTaskGetTickCountFromISR &rArr; vPortValidateInterruptPriority
 </UL>
 <BR>[Calls]<UL><LI><a href="#[192]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PID_Compute

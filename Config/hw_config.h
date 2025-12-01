@@ -174,30 +174,30 @@ extern TIM_HandleTypeDef htim10;  /* 假设使用TIM10 */
 #define MOTOR_SPEED_MAX         1000    /* 最大速度 (0-1000) */
 #define MOTOR_SPEED_MIN         0       /* 最小速度 */
 #define WHEEL_MOTOR_SPEED_MAX   1000    /* 轮电机最大速度 */
-#define BRUSH_MOTOR_SPEED_MAX   500     /* 边刷电机最大速度 */
+#define BRUSH_MOTOR_SPEED_MAX   1000     /* 边刷电机最大速度 */
 #define FAN_MOTOR_SPEED_MAX     1000    /* 吸尘电机最大速度 */
-#define PUMP_MOTOR_SPEED_MAX    500     /* 水泵电机最大速度 */
+#define PUMP_MOTOR_SPEED_MAX    1000     /* 水泵电机最大速度 */
 
 /* 边刷电机速度档位 (0-100) */
 #define BRUSH_MOTOR_SPEED_OFF   0       /* 关闭 */
-#define BRUSH_MOTOR_SPEED_LOW   30      /* 低速 */
-#define BRUSH_MOTOR_SPEED_HIGH  80      /* 高速 */
+#define BRUSH_MOTOR_SPEED_LOW   500      /* 低速 */
+#define BRUSH_MOTOR_SPEED_HIGH  800      /* 高速 */
 
 /* 水箱增压电机速度档位 (0-100) */
 #define PUMP_MOTOR_SPEED_OFF    0       /* 关闭 */
-#define PUMP_MOTOR_SPEED_LOW    25      /* 低速 */
-#define PUMP_MOTOR_SPEED_MEDIUM 50      /* 中速 */
-#define PUMP_MOTOR_SPEED_HIGH   80      /* 高速 */
-#define PUMP_MOTOR_SPEED_TURBO  110     /* 超高速 */
-#define PUMP_MOTOR_SPEED_ULTRA  140     /* 最大水量 */
+#define PUMP_MOTOR_SPEED_LOW   300      /* 低速 */
+#define PUMP_MOTOR_SPEED_MEDIUM 500      /* 中速 */
+#define PUMP_MOTOR_SPEED_HIGH   700      /* 高速 */
+#define PUMP_MOTOR_SPEED_TURBO  800     /* 超高速 */
+#define PUMP_MOTOR_SPEED_ULTRA  1000     /* 最大水量 */
 
 /* 风机速度档位 (RPM) */
 #define FAN_MOTOR_SPEED_OFF     0       /* 关闭 */
-#define FAN_MOTOR_SPEED_1       1000    /* 档位1 */
-#define FAN_MOTOR_SPEED_2       2000    /* 档位2 */
-#define FAN_MOTOR_SPEED_3       3000    /* 档位3 */
-#define FAN_MOTOR_SPEED_4       4000    /* 档位4 */
-#define FAN_MOTOR_SPEED_5       5000    /* 档位5 */
+#define FAN_MOTOR_SPEED_1       300    /* 档位1 */
+#define FAN_MOTOR_SPEED_2       500    /* 档位2 */
+#define FAN_MOTOR_SPEED_3       700    /* 档位3 */
+#define FAN_MOTOR_SPEED_4       800    /* 档位4 */
+#define FAN_MOTOR_SPEED_5       1000    /* 档位5 */
 
 /* ============================================
    USB通信配置 (USB Communication Config)
